@@ -13,7 +13,9 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-export function FallingBears({ src = "/gaucute.png" }: { src?: string }) {
+const DEFAULT_BEAR_SRC = `${import.meta.env.BASE_URL}gaucute.png`;
+
+export function FallingBears({ src = DEFAULT_BEAR_SRC }: { src?: string }) {
   const bears = useMemo(() => {
     const half = Math.floor(BEAR_COUNT / 2);
     // eslint-disable-next-line react-hooks/purity

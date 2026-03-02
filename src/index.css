@@ -125,19 +125,8 @@
   }
 }
 
-/* Font BlackMango - đặt file .otf vào public/fonts/BlackMango-Medium.otf nếu cần */
-@font-face {
-  font-family: "BlackMango-Medium";
-  src: url("/fonts/BlackMango-Medium.otf") format("opentype");
-  font-display: swap;
-}
-
-/* Font Ephesis-Regular.ttf - đặt file vào public/fonts/Ephesis-Regular.ttf */
-@font-face {
-  font-family: "Ephesis-Regular";
-  src: url("/fonts/Ephesis-Regular.ttf") format("truetype");
-  font-display: swap;
-}
+/* Font BlackMango - URL được inject từ main.tsx theo BASE để đúng GitHub Pages */
+/* Font Ephesis - URL được inject từ main.tsx theo BASE để đúng GitHub Pages */
 
 /* SAVE THE DATE - text-block-css & full-width */
 .full-width {
@@ -183,10 +172,7 @@
   }
 }
 
-@font-face {
-  font-family: 'BlackMango';
-  src: url('/fonts/BlackMango-Medium.woff2') format('woff2');
-}
+/* BlackMango font-face inject từ main.tsx */
 
 .font-blackmango {
   font-family: 'BlackMango', cursive;

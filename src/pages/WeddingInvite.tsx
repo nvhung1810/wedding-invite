@@ -31,22 +31,23 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
-const BG_MUSIC_SRC = "/bg-music.mp3";
+const BASE = import.meta.env.BASE_URL;
+const BG_MUSIC_SRC = `${BASE}bg-music.mp3`;
 
 /** Tất cả ảnh dùng trong trang – preload khi mount để cuộn tới là sẵn sàng */
 const PRELOAD_IMAGES = [
-  "/main-1.jpg",
-  "/3Q2A6279.JPG",
-  "/3Q2A6245.JPG",
-  "/qr-bank.png",
-  "/3Q2A6469.jpg",
-  "/3Q2A5966.jpg",
-  "/3Q2A6413.jpg",
-  "/3Q2A5863.jpg",
-  "/3Q2A6028.jpg",
-  "/3Q2A6475.jpg",
-  "/3Q2A6427.jpg",
-  "/60x90.jpg",
+  `${BASE}main-1.jpg`,
+  `${BASE}3Q2A6279.JPG`,
+  `${BASE}3Q2A6245.JPG`,
+  `${BASE}qr-bank.png`,
+  `${BASE}3Q2A6469.jpg`,
+  `${BASE}3Q2A5966.jpg`,
+  `${BASE}3Q2A6413.jpg`,
+  `${BASE}3Q2A5863.jpg`,
+  `${BASE}3Q2A6028.jpg`,
+  `${BASE}3Q2A6475.jpg`,
+  `${BASE}3Q2A6427.jpg`,
+  `${BASE}60x90.jpg`,
   "https://content.pancake.vn/1/s840x1600/fwebp/65/3c/aa/be/35e135afc2c6420bc52abd8fb3768c346420d9efa7b879cd959ee353.png",
   "https://content.pancake.vn/1/s489x489/fwebp/9f/06/d9/3a/4f89683f3c43ed295fd5da05de67d0db47eb178a7d68b96e19166749.png",
   "https://content.pancake.vn/1/s1411x548/fwebp/cf/cf/28/5f/f9ca08165577556ed2df053b0962a0e8e670490844d7ad5e84fa48b2.png",
@@ -119,7 +120,7 @@ export function WeddingInvite() {
               style={{ borderColor: "rgba(226, 236, 255, 1)" }}
             >
               <ImageWithSkeleton
-                src="/main-1.jpg"
+                src={`${BASE}main-1.jpg`}
                 alt={t("hero.coupleNameAria")}
                 className="object-cover"
                 loading="lazy"
@@ -145,7 +146,7 @@ export function WeddingInvite() {
             <section className="grid grid-cols-2 text-[#1e3a5f]">
               <div className="aspect-[3/4] overflow-hidden rounded border-2 border-sky-200 bg-sky-50/50">
                 <ImageWithSkeleton
-                  src="/3Q2A6279.JPG"
+                  src={`${BASE}3Q2A6279.JPG`}
                   alt={t("groomSide.groomAlt")}
                   loading="eager"
                   decoding="async"
@@ -200,7 +201,7 @@ export function WeddingInvite() {
               </div>
               <div className="aspect-[3/4] overflow-hidden rounded border-2 border-sky-200 bg-sky-50/50">
                 <ImageWithSkeleton
-                  src="/3Q2A6245.JPG"
+                  src={`${BASE}3Q2A6245.JPG`}
                   alt={t("brideSide.brideAlt")}
                   loading="eager"
                   decoding="async"
@@ -265,7 +266,7 @@ export function WeddingInvite() {
                     <div className="flex flex-col items-center gap-4 py-2">
                       <div className="border-4 border-[#0a2540] p-1 bg-white">
                         <ImageWithSkeleton
-                          src="/qr-bank.png"
+                          src={`${BASE}qr-bank.png`}
                           alt="QR chuyển khoản"
                           fill={false}
                           className="block w-48 h-48 object-contain"
@@ -327,7 +328,7 @@ export function WeddingInvite() {
                     <div className="flex flex-col items-center gap-4 py-2">
                       <div className="border-4 border-[#0a2540] p-1 bg-white">
                         <ImageWithSkeleton
-                          src="/qr-bank.png"
+                          src={`${BASE}qr-bank.png`}
                           alt="QR chuyển khoản"
                           fill={false}
                           className="block w-48 h-48 object-contain"
@@ -546,29 +547,29 @@ export function WeddingInvite() {
               >
                 {/* HÀNG 1 */}
                 <div className="min-h-0 h-full w-full overflow-hidden bg-gray-100">
-                  <ImageWithSkeleton src="/3Q2A6469.jpg" alt="" loading="lazy" decoding="async" />
+                  <ImageWithSkeleton src={`${BASE}3Q2A6469.jpg`} alt="" loading="lazy" decoding="async" />
                 </div>
                 <div className="min-h-0 h-full w-full overflow-hidden bg-gray-100">
-                  <ImageWithSkeleton src="/3Q2A5966.jpg" alt="" loading="lazy" decoding="async" />
+                  <ImageWithSkeleton src={`${BASE}3Q2A5966.jpg`} alt="" loading="lazy" decoding="async" />
                 </div>
 
                 {/* HÀNG 2: BỐ CỤC ĐẶC BIỆT */}
                 <div className="min-h-0 h-full w-full overflow-hidden bg-gray-100">
-                  <ImageWithSkeleton src="/3Q2A6413.jpg" alt="" loading="lazy" decoding="async" />
+                  <ImageWithSkeleton src={`${BASE}3Q2A6413.jpg`} alt="" loading="lazy" decoding="async" />
                 </div>
                 <div className="grid grid-rows-2 gap-2 min-h-0">
                   <div className="min-h-0 overflow-hidden bg-gray-100">
-                    <ImageWithSkeleton src="/3Q2A5863.jpg" alt="" loading="lazy" decoding="async" />
+                    <ImageWithSkeleton src={`${BASE}3Q2A5863.jpg`} alt="" loading="lazy" decoding="async" />
                   </div>
                   <div className="min-h-0 overflow-hidden bg-gray-100">
-                    <ImageWithSkeleton src="/3Q2A6028.jpg" alt="" loading="lazy" decoding="async" />
+                    <ImageWithSkeleton src={`${BASE}3Q2A6028.jpg`} alt="" loading="lazy" decoding="async" />
                   </div>
                 </div>
                 <div className="min-h-0 h-full w-full overflow-hidden bg-gray-100">
-                  <ImageWithSkeleton src="/3Q2A6475.jpg" alt="" loading="lazy" decoding="async" />
+                  <ImageWithSkeleton src={`${BASE}3Q2A6475.jpg`} alt="" loading="lazy" decoding="async" />
                 </div>
                 <div className="min-h-0 h-full w-full overflow-hidden bg-gray-100">
-                  <ImageWithSkeleton src="/3Q2A6427.jpg" alt="" loading="lazy" decoding="async" />
+                  <ImageWithSkeleton src={`${BASE}3Q2A6427.jpg`} alt="" loading="lazy" decoding="async" />
                 </div>
               </div>
             </section>
@@ -579,7 +580,7 @@ export function WeddingInvite() {
             >
               <div className="relative w-full overflow-hidden rounded-none">
                 <ImageWithSkeleton
-                  src="/60x90.jpg"
+                  src={`${BASE}60x90.jpg`}
                   alt=""
                   fill={false}
                   loading="lazy"

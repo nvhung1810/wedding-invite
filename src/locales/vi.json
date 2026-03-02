@@ -1,0 +1,90 @@
+{
+  "hero": {
+    "saveTheDate": "Save The Date",
+    "playMusic": "Bật nhạc",
+    "coupleName": "Đức Dũng & Trần Ngọc",
+    "coupleNameAria": "Đức Dũng & Trần Ngọc"
+  },
+  "quote": "Hôn nhân là chuyện cả đời,\nYêu người vừa ý, cưới người mình thương...",
+  "groomSide": {
+    "label": "NHÀ TRAI",
+    "father": "ÔNG: PHẠM ĐỨC HOÀI",
+    "mother": "BÀ: NGUYỄN THỊ THÌN",
+    "role": "Chú Rể",
+    "name": "Đức Dũng",
+    "groomAlt": "Chú rể"
+  },
+  "brideSide": {
+    "label": "NHÀ GÁI",
+    "father": "ÔNG: TRẦN VĂN THẮNG",
+    "mother": "BÀ: MAI THỊ NHƯỜNG",
+    "role": "Cô Dâu",
+    "name": "Trần Ngọc",
+    "brideAlt": "Cô dâu"
+  },
+  "invitation": {
+    "title": "Thư Mời",
+    "subtitle": "THAM DỰ LỄ CƯỚI CỦA ĐỨC DŨNG & TRẦN NGỌC"
+  },
+  "party": {
+    "groom": {
+      "title": "TIỆC CƯỚI NHÀ TRAI",
+      "date": "22.03.2026",
+      "time": "CHỦ NHẬT | 11H00",
+      "lunarDate": "Tức Ngày 04 Tháng 02 Năm Bính Ngọ",
+      "venue": "Trung tâm Hội nghị - Tiệc cưới - Nhà hàng 500 Tổ 2, Khu 7, Phường Giếng Đáy, TP Hạ Long, Quảng Ninh",
+      "cta": "GỬI MỪNG CƯỚI",
+      "dialogTitle": "Xác nhận tham dự - Tiệc nhà Trai"
+    },
+    "bride": {
+      "title": "TIỆC CƯỚI NHÀ GÁI",
+      "date": "21.03.2026",
+      "time": "THỨ 7 | 16H00",
+      "lunarDate": "Tức Ngày 03 Tháng 02 Năm Bính Ngọ",
+      "venue": "Xóm 7 xã Nam Hưng, Huyện Tiền Hải, Tỉnh Thái Bình",
+      "cta": "GỬI MỪNG CƯỚI",
+      "dialogTitle": "Xác nhận tham dự - Tiệc nhà Gái"
+    }
+  },
+  "rsvp": {
+    "nameLabel": "Họ tên",
+    "namePlaceholder": "Nguyễn Văn A",
+    "phoneLabel": "Số điện thoại",
+    "phonePlaceholder": "0900 000 000",
+    "messageLabel": "Lời chúc (không bắt buộc)",
+    "messagePlaceholder": "Gửi lời chúc đến cô dâu chú rể...",
+    "close": "Đóng",
+    "submit": "GỬI NGAY"
+  },
+  "validation": {
+    "nameRequired": "Vui lòng nhập tên",
+    "phoneRequired": "Vui lòng nhập số điện thoại"
+  },
+  "saveTheDate": {
+    "title": "SAVE THE DATE",
+    "monthYear": "THÁNG 3 - 2026",
+    "weekdays": ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
+  },
+  "alert": {
+    "invalidCodeTitle": "Alert",
+    "invalidCodeMessage": "Expired or Invalid Code!",
+    "ok": "OK"
+  },
+  "venue": {
+    "title": "Địa điểm tổ chức",
+    "groomLabel": "NHÀ TRAI",
+    "groomAddress": "Trung tâm Hội nghị - Tiệc cưới - Nhà hàng 500 Tổ 2, Khu 7, Phường Giếng Đáy, TP Hạ Long, Quảng Ninh",
+    "brideLabel": "NHÀ GÁI",
+    "brideAddress": "Xóm 7 xã Nam Hưng, Huyện Tiền Hải, Tỉnh Thái Bình"
+  },
+  "album": {
+    "title": "Album hình cưới"
+  },
+  "footer": {
+    "welcome": "Rất hân hạnh được đón tiếp!"
+  },
+  "gift": {
+    "modalTitle": "Gửi Mừng Cưới",
+    "bankInfo": "TECHCOMBANK - DANG VAN HOANG"
+  }
+}

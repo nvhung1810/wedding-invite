@@ -75,3 +75,4 @@ export default defineConfig([
 ```
 # wedding-invite
 # wedding-invite
+# wedding-invite

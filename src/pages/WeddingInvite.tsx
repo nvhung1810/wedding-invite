@@ -143,45 +143,45 @@ export function WeddingInvite() {
           aria-label={t("hero.tapToOpen")}
         >
           <div className="mt-20 flex flex-col items-center text-center sm:mt-40">
-              <p
-                className="font-['Great_Vibes',cursive] text-3xl min-[376px]:text-4xl tracking-wide"
-                style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
-              >
-                {t("hero.coupleName")}
-              </p>
-              <div
-                className="my-2 h-px w-50"
-                aria-hidden
-                style={{
-                  background: "linear-gradient(90deg, transparent 0%, rgba(94,55,70,0.6) 50%, transparent 100%)",
-                }}
-              />
-              <p className="text-sm font-medium tracking-[0.2em]" style={{ color: "#6b4a52" }}>
-                {t("hero.saveTheDate")}
-              </p>
-            </div>
-            <div className="overlay-open-button relative flex flex-1 items-center justify-center">
-              <span className="overlay-open-glow" aria-hidden />
-              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-[calc(50%+4rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0s" }} />
-              <span className="absolute left-1/2 top-1/2 h-2 w-2 translate-x-[calc(-50%+3.5rem)] -translate-y-1/2 overlay-sparkle" aria-hidden style={{ animationDelay: "0.3s" }} />
-              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-[calc(50%+3rem)] -translate-y-[calc(-50%+2.5rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0.6s" }} />
-              <span className="overlay-open-circle flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg sm:h-28 sm:w-28">
-                <span
-                  className="font-['Great_Vibes',cursive] text-3xl text-[#1e3a5f] sm:text-4xl"
-                  style={{ fontFamily: "'Great Vibes', cursive" }}
-                >
-                  {t("hero.open")}
-                </span>
-              </span>
-            </div>
-
-            {/* Dưới: Chạm để mở thiệp cưới */}
             <p
-              className="font-['Great_Vibes',cursive] text-xl tracking-wide sm:text-2xl animate-overlay-text"
+              className="font-['Great_Vibes',cursive] text-3xl min-[376px]:text-4xl tracking-wide"
               style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
             >
-              {t("hero.tapToOpen")}
+              {t("hero.coupleName")}
             </p>
+            <div
+              className="my-2 h-px w-50"
+              aria-hidden
+              style={{
+                background: "linear-gradient(90deg, transparent 0%, rgba(94,55,70,0.6) 50%, transparent 100%)",
+              }}
+            />
+            <p className="text-sm font-medium tracking-[0.2em]" style={{ color: "#6b4a52" }}>
+              {t("hero.saveTheDate")}
+            </p>
+          </div>
+          <div className="overlay-open-button relative flex flex-1 items-center justify-center">
+            <span className="overlay-open-glow" aria-hidden />
+            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-[calc(50%+4rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0s" }} />
+            <span className="absolute left-1/2 top-1/2 h-2 w-2 translate-x-[calc(-50%+3.5rem)] -translate-y-1/2 overlay-sparkle" aria-hidden style={{ animationDelay: "0.3s" }} />
+            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-[calc(50%+3rem)] -translate-y-[calc(-50%+2.5rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0.6s" }} />
+            <span className="overlay-open-circle flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg sm:h-28 sm:w-28">
+              <span
+                className="font-['Great_Vibes',cursive] text-3xl text-[#1e3a5f] sm:text-4xl"
+                style={{ fontFamily: "'Great Vibes', cursive" }}
+              >
+                {t("hero.open")}
+              </span>
+            </span>
+          </div>
+
+          {/* Dưới: Chạm để mở thiệp cưới */}
+          <p
+            className="font-['Great_Vibes',cursive] text-xl tracking-wide sm:text-2xl animate-overlay-text"
+            style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
+          >
+            {t("hero.tapToOpen")}
+          </p>
         </button>
       )}
       <div
@@ -359,7 +359,7 @@ export function WeddingInvite() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="border-4 border-[#0a2540] p-1 bg-white">
+                          <div className="border-4 border-[#0a2540] p-1 bg-white w-[176px] h-[202px]">
                             <ImageWithSkeleton
                               src={`${BASE}qr-chure.jpg`}
                               alt="QR chuyển khoản chú rể"
@@ -421,7 +421,7 @@ export function WeddingInvite() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="border-4 border-[#0a2540] p-1 bg-white">
+                          <div className="border-4 border-[#0a2540] p-1 bg-white w-48 h-48">
                             <ImageWithSkeleton
                               src={`${BASE}qr-codau.jpg`}
                               alt="QR chuyển khoản cô dâu"
@@ -687,7 +687,7 @@ export function WeddingInvite() {
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                       <div className="absolute inset-0 pointer-events-none" aria-hidden />
                       <ImageWithSkeleton
-                        src="https://content.pancake.vn/1/s1411x548/fwebp/cf/cf/28/5f/f9ca08165577556ed2df053b0962a0e8e670490844d7ad5e84fa48b2.png"
+                        src={`${BASE}thankyou.webp`}
                         alt=""
                         className="relative z-10 bg-contain bg-center bg-no-repeat shrink-0 pointer-events-auto object-contain"
                         fill={false}

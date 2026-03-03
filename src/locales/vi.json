@@ -3,7 +3,9 @@
     "saveTheDate": "Save The Date",
     "playMusic": "Bật nhạc",
     "coupleName": "Đức Dũng & Trần Ngọc",
-    "coupleNameAria": "Đức Dũng & Trần Ngọc"
+    "coupleNameAria": "Đức Dũng & Trần Ngọc",
+    "tapToOpen": "Chạm để mở thiệp cưới",
+    "open": "Mở"
   },
   "quote": "Hôn nhân là chuyện cả đời,\nYêu người vừa ý, cưới người mình thương...",
   "groomSide": {
@@ -85,6 +87,8 @@
   },
   "gift": {
     "modalTitle": "Gửi Mừng Cưới",
-    "bankInfo": "TECHCOMBANK - DANG VAN HOANG"
+    "bankInfo": "TECHCOMBANK - DANG VAN HOANG",
+    "bankInfoGroom": "TB BANK: PHAM DUC DUNG",
+    "bankInfoBride": "MB BANK: TRAN THI NGOC"
   }
 }

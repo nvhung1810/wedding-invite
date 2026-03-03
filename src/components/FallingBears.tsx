@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-const BEAR_COUNT = 16;
-const FALL_DURATION_MIN = 10;
-const FALL_DURATION_MAX = 16;
+const BEAR_COUNT = 6;
+const FALL_DURATION_MIN = 28;
+const FALL_DURATION_MAX = 38;
 
 function shuffle<T>(arr: T[]): T[] {
   const out = [...arr];
@@ -35,7 +35,7 @@ export function FallingBears({ src = DEFAULT_BEAR_SRC }: { src?: string }) {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-[100] overflow-hidden"
       style={{ contain: "layout style paint" }}
       aria-hidden
     >

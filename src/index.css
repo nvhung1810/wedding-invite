@@ -118,10 +118,19 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+    box-sizing: border-box;
+  }
+  html {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: "Lora", Georgia, serif;
+    margin: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
   }
 }
 
@@ -193,6 +202,12 @@
   contain-intrinsic-size: auto 400px;
 }
 
+/* Ghi đè div bên trong Radix ScrollArea Viewport (style mặc định: display: table; min-width: 100%) */
+[data-radix-scroll-area-viewport] > div {
+  display: block !important;
+  min-width: 100%;
+}
+
 /* Slide in cho cụm nhà trai / nhà gái */
 @keyframes slide-in-from-left {
   from {
@@ -219,6 +234,76 @@
 }
 .animate-slide-in-right {
   animation: slide-in-from-right 0.6s ease-out both;
+}
+
+/* Overlay mở thiệp: fade out mượt + animation chữ */
+.overlay-enter-card {
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.overlay-enter-card.overlay-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes overlay-text-soft {
+  0%,
+  100% {
+    opacity: 0.92;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+.animate-overlay-text {
+  animation: overlay-text-soft 2.5s ease-in-out infinite;
+}
+
+/* Nút tròn Mở: viền sáng + sparkles */
+.overlay-open-button {
+  position: relative;
+}
+.overlay-open-glow {
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.15) 35%,
+    transparent 65%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+}
+.overlay-open-circle {
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 0 24px rgba(255, 255, 255, 0.4),
+    0 0 48px rgba(255, 255, 255, 0.2),
+    0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.overlay-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  animation: overlay-sparkle-pulse 2s ease-in-out infinite;
+}
+@keyframes overlay-sparkle-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
 }
 
 /* Gấu rơi như mưa */

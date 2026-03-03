@@ -125,11 +125,11 @@ export function WeddingInvite() {
       {overlayVisible && (
         <button
           type="button"
-          className={`overlay-enter-card fixed inset-0 z-[200] flex min-h-[100dvh] h-full min-w-full cursor-pointer flex-col items-center justify-between overflow-hidden px-2 py-12 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
+          className={`overlay-enter-card fixed left-0 right-0 top-0 z-[200] mx-auto flex h-full min-h-[100dvh] w-full max-w-[420px] cursor-pointer flex-col items-center justify-between overflow-hidden px-2 py-12 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
             }`}
           style={{
             minHeight: "100dvh",
-            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 35%, transparent 65%, rgba(0,0,0,0.1) 100%), linear-gradient(180deg, rgba(226,236,255,0.31) 0%, rgba(226,236,255,0.31) 100%), url("${BASE}backgound-1.png")`,
+            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 35%, transparent 65%, rgba(0,0,0,0.1) 100%), linear-gradient(180deg, rgba(226,236,255,0.31) 0%, rgba(226,236,255,0.31) 100%), url("${BASE}backgound-1.jpg")`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center, center center, 20% center",
@@ -143,45 +143,45 @@ export function WeddingInvite() {
           aria-label={t("hero.tapToOpen")}
         >
           <div className="mt-20 flex flex-col items-center text-center sm:mt-40">
+              <p
+                className="font-['Great_Vibes',cursive] text-3xl min-[376px]:text-4xl tracking-wide"
+                style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
+              >
+                {t("hero.coupleName")}
+              </p>
+              <div
+                className="my-2 h-px w-50"
+                aria-hidden
+                style={{
+                  background: "linear-gradient(90deg, transparent 0%, rgba(94,55,70,0.6) 50%, transparent 100%)",
+                }}
+              />
+              <p className="text-sm font-medium tracking-[0.2em]" style={{ color: "#6b4a52" }}>
+                {t("hero.saveTheDate")}
+              </p>
+            </div>
+            <div className="overlay-open-button relative flex flex-1 items-center justify-center">
+              <span className="overlay-open-glow" aria-hidden />
+              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-[calc(50%+4rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0s" }} />
+              <span className="absolute left-1/2 top-1/2 h-2 w-2 translate-x-[calc(-50%+3.5rem)] -translate-y-1/2 overlay-sparkle" aria-hidden style={{ animationDelay: "0.3s" }} />
+              <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-[calc(50%+3rem)] -translate-y-[calc(-50%+2.5rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0.6s" }} />
+              <span className="overlay-open-circle flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg sm:h-28 sm:w-28">
+                <span
+                  className="font-['Great_Vibes',cursive] text-3xl text-[#1e3a5f] sm:text-4xl"
+                  style={{ fontFamily: "'Great Vibes', cursive" }}
+                >
+                  {t("hero.open")}
+                </span>
+              </span>
+            </div>
+
+            {/* Dưới: Chạm để mở thiệp cưới */}
             <p
-              className="font-['Great_Vibes',cursive] text-3xl min-[376px]:text-4xl tracking-wide"
+              className="font-['Great_Vibes',cursive] text-xl tracking-wide sm:text-2xl animate-overlay-text"
               style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
             >
-              {t("hero.coupleName")}
+              {t("hero.tapToOpen")}
             </p>
-            <div
-              className="my-2 h-px w-50"
-              aria-hidden
-              style={{
-                background: "linear-gradient(90deg, transparent 0%, rgba(94,55,70,0.6) 50%, transparent 100%)",
-              }}
-            />
-            <p className="text-sm font-medium tracking-[0.2em]" style={{ color: "#6b4a52" }}>
-              {t("hero.saveTheDate")}
-            </p>
-          </div>
-          <div className="overlay-open-button relative flex flex-1 items-center justify-center">
-            <span className="overlay-open-glow" aria-hidden />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-[calc(50%+4rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0s" }} />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 translate-x-[calc(-50%+3.5rem)] -translate-y-1/2 overlay-sparkle" aria-hidden style={{ animationDelay: "0.3s" }} />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-[calc(50%+3rem)] -translate-y-[calc(-50%+2.5rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0.6s" }} />
-            <span className="overlay-open-circle flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg sm:h-28 sm:w-28">
-              <span
-                className="font-['Great_Vibes',cursive] text-3xl text-[#1e3a5f] sm:text-4xl"
-                style={{ fontFamily: "'Great Vibes', cursive" }}
-              >
-                {t("hero.open")}
-              </span>
-            </span>
-          </div>
-
-          {/* Dưới: Chạm để mở thiệp cưới */}
-          <p
-            className="font-['Great_Vibes',cursive] text-xl tracking-wide sm:text-2xl animate-overlay-text"
-            style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
-          >
-            {t("hero.tapToOpen")}
-          </p>
         </button>
       )}
       <div

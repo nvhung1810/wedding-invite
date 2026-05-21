@@ -268,8 +268,8 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(122, 92, 79, 0.45) 20%,
-    rgba(122, 92, 79, 0.45) 80%,
+    rgba(133, 73, 28, 0.45) 20%,
+    rgba(133, 73, 28, 0.45) 80%,
     transparent 100%
   );
 }
@@ -281,8 +281,8 @@
   width: 6px;
   height: 6px;
   transform: translate(-50%, -50%) rotate(45deg);
-  border: 1px solid rgba(122, 92, 79, 0.55);
-  background: #faf8f5;
+  border: 1px solid rgba(133, 73, 28, 0.55);
+  background: #fefcf6;
 }
 .overlay-open-pill {
   display: inline-flex;
@@ -290,22 +290,22 @@
   justify-content: center;
   min-width: 5.5rem;
   padding: 0.55rem 1.75rem;
-  border: 1.5px solid rgba(122, 92, 79, 0.75);
+  border: 1.5px solid rgba(133, 73, 28, 0.75);
   border-radius: 9999px;
-  background: rgba(250, 248, 245, 0.85);
+  background: rgba(254, 252, 246, 0.85);
   font-family: "Quicksand", sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #7a5c4f;
-  box-shadow: 0 2px 12px rgba(122, 92, 79, 0.12);
+  color: #85491c;
+  box-shadow: 0 2px 12px rgba(133, 73, 28, 0.12);
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 .overlay-enter-card:hover .overlay-open-pill,
 .overlay-enter-card:focus-visible .overlay-open-pill {
-  background: rgba(250, 248, 245, 0.95);
-  box-shadow: 0 4px 16px rgba(122, 92, 79, 0.18);
+  background: rgba(254, 252, 246, 0.95);
+  box-shadow: 0 4px 16px rgba(133, 73, 28, 0.18);
 }
 
 /* Gấu rơi như mưa */

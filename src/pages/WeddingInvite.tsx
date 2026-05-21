@@ -164,7 +164,7 @@ export function WeddingInvite() {
                 <p className="overlay-layout__invite text-left text-base uppercase leading-relaxed w-2/3">
                   {t("hero.overlay.inviteLine")}
                 </p>
-                <h1 className="overlay-layout__couple text-center text-[2.5rem] uppercase leading-snug tracking-[0.04em]">
+                <h1 className="overlay-layout__couple text-center text-[2.3rem] min-[400px]:text-[2.5rem] uppercase leading-snug tracking-[0.04em]">
                   {t("hero.coupleName")}
                 </h1>
                 <div className="overlay-layout__datetime pt-40">
@@ -183,7 +183,7 @@ export function WeddingInvite() {
                 </p>
               </div>
 
-              <p className="overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
+              <p className="pb-4 overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
                 {t("hero.tapToOpen")}
               </p>
             </div>
@@ -704,11 +704,11 @@ export function WeddingInvite() {
                         decoding="async"
                         style={{
                           backgroundColor: 'rgba(133, 73, 28, 0.25)',
-                          top: "-20px"
+                          top: "-10px"
                         }}
                       />
                       <div className="absolute bottom-2 flex justify-center z-10">
-                        <span className="text-white text-2xl font-medium font-['Allura',cursive] text-center">
+                        <span className="text-white text-2xl font-medium font-['Great_Vibes',cursive] text-center">
                           {t("footer.welcome")}
                         </span>
                       </div>

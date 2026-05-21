@@ -717,44 +717,26 @@ export function WeddingInvite() {
                 </section>
 
                 {/* Footer */}
-                <section className="mt-2 text-center content-visibility-section "
-
+                <section className="mt-4 text-center px-1"
                 >
-                  <div className="relative w-full overflow-hidden rounded-none">
-                    <ImageWithSkeleton
-                      src={`${BASE}60x90.jpg`}
-                      alt=""
-                      fill={false}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 pointer-events-none" aria-hidden style={{
-                      backgroundColor: "rgba(254, 252, 246, 0.42)",
-                    }} />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                      <div className="absolute inset-0 pointer-events-none" aria-hidden />
-                      <ImageWithSkeleton
-                        src={`${BASE}thankyou.jpg`}
-                        alt=""
-                        className="relative z-10 animate-overlay-text bg-contain bg-center bg-no-repeat shrink-0 pointer-events-auto object-contain"
-                        fill={false}
-                        loading="lazy"
-                        decoding="async"
-                        style={{
-                          backgroundColor: 'rgba(133, 73, 28, 0.25)',
-                          top: "-10px"
-                        }}
-                      />
-                      <div className="absolute bottom-2 flex justify-center z-10">
-                        <span
-                          className="text-white text-2xl font-medium font-['Allura',cursive] text-center"
-                          style={{ fontFamily: "'Allura', 'Quicksand', sans-serif" }}
-                        >
-                          {t("footer.welcome")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <ImageWithSkeleton
+                    src={`${BASE}thankyou.jpg`}
+                    alt=""
+                    className="pointer-events-auto relative min-h-auto"
+                    fill={false}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      backgroundColor: 'rgba(133, 73, 28, 0.25)',
+                      top: "-10px"
+                    }}
+                  >
+                    <span
+                      className="w-full absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-2xl font-medium font-['Allura',cursive] text-center"
+                    >
+                      {t("footer.welcome")}
+                    </span>
+                  </ImageWithSkeleton>
                 </section>
               </div>
             </div>

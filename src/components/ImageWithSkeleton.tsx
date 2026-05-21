@@ -19,6 +19,7 @@ export function ImageWithSkeleton({
   wrapperClassName = "",
   fill = true,
   onLoad,
+  children,
   ...props
 }: ImageWithSkeletonProps) {
   const [loaded, setLoaded] = useState(() =>
@@ -75,16 +76,15 @@ export function ImageWithSkeleton({
         alt={alt}
         className={
           fill
-            ? `absolute inset-0 z-[2] h-full w-full object-cover transition-opacity duration-300 ${
-                loaded ? "opacity-100" : "opacity-0"
-              } ${className}`
-            : `block w-full h-auto align-middle transition-opacity duration-300 ${
-                loaded ? "opacity-100" : "opacity-0"
-              } ${className}`
+            ? `absolute inset-0 z-[2] h-full w-full object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"
+            } ${className}`
+            : `block w-full h-auto align-middle transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"
+            } ${className}`
         }
         onLoad={handleLoad}
         onError={handleError}
       />
+      {children}
     </div>
   );
 }

@@ -364,12 +364,11 @@ export function WeddingInvite() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="border-4 border-[#85491c] p-1 bg-[#fefcf6] w-[176px] h-[202px]">
+                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] p-1 bg-[#fefcf6]">
                             <ImageWithSkeleton
                               src={`${BASE}qr-chure.jpg`}
                               alt="QR chuyển khoản chú rể"
-                              fill={false}
-                              className="block w-48 h-48 object-contain"
+                              className="object-contain"
                               loading="lazy"
                               decoding="async"
                             />
@@ -426,12 +425,11 @@ export function WeddingInvite() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="border-4 border-[#85491c] p-1 bg-[#fefcf6] w-48 h-48">
+                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] p-1 bg-[#fefcf6]">
                             <ImageWithSkeleton
                               src={`${BASE}qr-codau.jpg`}
                               alt="QR chuyển khoản cô dâu"
-                              fill={false}
-                              className="block w-48 h-48 object-contain"
+                              className="object-contain"
                               loading="lazy"
                               decoding="async"
                             />

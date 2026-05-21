@@ -45,10 +45,10 @@ const HERO_BG = `${BASE}hero-bg.png`;
 /** Album: các ảnh AN_03293 (trừ 3 ảnh đã dùng ở hero / nhà trai / nhà gái) */
 const ALBUM_IMAGES = [
   "AN_03293_2.jpg",
-  "AN_03293_3.jpg",
   "AN_03293_5.jpg",
   "AN_03293_6.jpg",
   "AN_03293_7.jpg",
+  "AN_03293_11.jpg",
   "AN_03293_8.jpg",
   "AN_03293_9.jpg",
 ] as const;
@@ -139,15 +139,10 @@ export function WeddingInvite() {
       {overlayVisible && (
         <button
           type="button"
-          className={`overlay-enter-card fixed left-0 right-0 top-0 z-[200] mx-auto h-full min-h-[100dvh] w-full max-w-[420px] cursor-pointer overflow-hidden outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
+          className={`overlay-enter-card fixed top-0 z-[200] h-[100dvh] min-h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
             }`}
           style={{
-            minHeight: "100dvh",
             backgroundColor: COLOR_CREAM,
-            backgroundImage: `url("${OVERLAY_BG}")`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
             fontFamily: '"Quicksand", sans-serif',
             color: COLOR_BROWN,
           }}
@@ -159,35 +154,38 @@ export function WeddingInvite() {
           }}
           aria-label={t("hero.tapToOpen")}
         >
-          <div className="flex h-full min-h-[100dvh] flex-col px-7 pb-18 pt-40 sm:px-9 sm:pt-60">
-            <p className="mt-20 text-left text-base w-2/3 uppercase leading-relaxed sm:text-base">
-              {t("hero.overlay.inviteLine")}
-            </p>
+          <div
+            className="overlay-stage"
+            style={{ backgroundImage: `url("${OVERLAY_BG}")` }}
+          >
+            <div className="overlay-layout">
+              <div className="overlay-layout__cluster">
+                <p className="overlay-layout__invite text-left text-base uppercase leading-relaxed w-2/3">
+                  {t("hero.overlay.inviteLine")}
+                </p>
+                <h1 className="overlay-layout__couple text-center text-[2.5rem] uppercase leading-snug tracking-[0.04em]">
+                  {t("hero.coupleName")}
+                </h1>
+                <div className="overlay-layout__datetime pt-40">
+                  <p className="font-bold tracking-wide text-[1.5rem]">
+                    {t("hero.overlay.dateTime")}
+                  </p>
+                  <p className="mt-1 font-normal tracking-wide text-xs">
+                    {t("hero.overlay.lunarDate")}
+                  </p>
+                </div>
 
-            <h1 className="mt-32 text-center uppercase leading-snug tracking-[0.04em] sm:mt-8 text-[2.5rem]">
-              {t("hero.coupleName")}
-            </h1>
+                <div className="overlay-layout__divider overlay-divider" aria-hidden />
 
-            <div className="flex-1 min-h-[2rem]" />
+                <p className="overlay-layout__presence whitespace-pre-line text-right text-xs uppercase leading-snug">
+                  {t("hero.overlay.presenceMessage")}
+                </p>
 
-            <div className="text-right">
-              <p className="font-bold tracking-wide text-[1.5rem]">
-                {t("hero.overlay.dateTime")}
-              </p>
-              <p className="mt-1 font-normal tracking-wide text-xs mb-4">
-                {t("hero.overlay.lunarDate")}
-              </p>
+                <p className="overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
+                  {t("hero.tapToOpen")}
+                </p>
+              </div>
             </div>
-
-            <div className="overlay-divider my-5" aria-hidden />
-
-            <p className="whitespace-pre-line text-right text-xs uppercase leading-snug sm:text-xs">
-              {t("hero.overlay.presenceMessage")}
-            </p>
-
-            <p className="mt-8 animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
-              {t("hero.tapToOpen")}
-            </p>
           </div>
         </button>
       )}

@@ -238,10 +238,81 @@
   animation: slide-in-from-right 0.6s ease-out both;
 }
 
-/* Overlay mở thiệp: fade out mượt + animation chữ */
+/* Overlay mở thiệp: nền phủ full màn (100dvh), chữ cố định theo % */
 .overlay-enter-card {
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 420px;
   transition: opacity 0.85s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+
+.overlay-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+}
+
+.overlay-layout {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 8%;
+  padding-bottom: calc(8% + env(safe-area-inset-bottom, 0px));
+}
+
+.overlay-layout__cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+
+.overlay-layout__invite {
+  align-self: flex-start;
+  width: 66.666667%;
+  margin: 0;
+}
+
+.overlay-layout__couple {
+  width: 100%;
+  margin: 1.25rem 0 0;
+}
+
+.overlay-layout__datetime {
+  width: 100%;
+  margin: 1.25rem 0 0;
+  text-align: right;
+}
+
+.overlay-layout__divider {
+  width: 100%;
+  margin: 1.25rem 0;
+}
+
+.overlay-layout__presence {
+  width: 100%;
+  margin: 0;
+  text-align: right;
+}
+
+.overlay-layout__tap {
+  width: 100%;
+  margin: 1.5rem 0 0;
+}
+
+/* Overlay mở thiệp: fade out mượt + animation chữ */
 .overlay-enter-card.overlay-exiting {
   opacity: 0;
   pointer-events: none;

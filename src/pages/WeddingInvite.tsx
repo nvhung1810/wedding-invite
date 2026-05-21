@@ -440,7 +440,7 @@ export function WeddingInvite() {
                   </CardFooter>
                 </Card>
 
-                {/* Save The Date - Tháng 3 / 2026, highlight 21 & 22 */}
+                {/* Save The Date - Tháng 6 / 2026, highlight 06 */}
                 <section className="mx-6 mt-6 rounded-2xl border border-solid border-[rgba(229,231,235,1)] bg-white/95 px-4 py-6 shadow-sm content-visibility-section">
                   <p
                     className="text-center text-3xl font-medium tracking-wide font-['Allura',cursive]"
@@ -471,14 +471,13 @@ export function WeddingInvite() {
                     </div>
                     <div className="grid grid-cols-7 gap-0 border border-t-0 border-[rgba(229,231,235,1)] bg-white">
                       {(() => {
-                        // 1/3/2026 là Chủ nhật → 6 ô trống, rồi 1..31
+                        // 1/6/2026 là Thứ hai → 0 ô trống, rồi 1..30
                         const days: (number | null)[] = [];
-                        for (let i = 0; i < 6; i++) days.push(null);
-                        for (let d = 1; d <= 31; d++) days.push(d);
+                        for (let d = 1; d <= 30; d++) days.push(d);
                         return days.map((d, i) => {
                           const col = i % 7;
                           const isSunday = col === 6;
-                          const isHighlight = d === 21 || d === 22;
+                          const isHighlight = d === 6;
                           return (
                             <div
                               key={i}

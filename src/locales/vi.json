@@ -2,48 +2,48 @@
   "hero": {
     "saveTheDate": "Save The Date",
     "playMusic": "Bật nhạc",
-    "coupleName": "Đức Dũng & Trần Ngọc",
-    "coupleNameAria": "Đức Dũng & Trần Ngọc",
+    "coupleName": "Nguyễn Thắng & Phạm Nguyệt",
+    "coupleNameAria": "Nguyễn Thắng & Phạm Nguyệt",
     "tapToOpen": "Chạm để mở thiệp cưới",
     "open": "Mở"
   },
   "quote": "Hôn nhân là chuyện cả đời,\nYêu người vừa ý, cưới người mình thương...",
   "groomSide": {
     "label": "NHÀ TRAI",
-    "father": "ÔNG: PHẠM ĐỨC HOÀI",
-    "mother": "BÀ: NGUYỄN THỊ THÌN",
+    "father": "ÔNG: NGUYỄN ĐỨC MẠNH",
+    "mother": "BÀ: NGUYỄN THỊ BÌNH",
     "role": "Chú Rể",
-    "name": "Đức Dũng",
+    "name": "Nguyễn Thắng",
     "groomAlt": "Chú rể"
   },
   "brideSide": {
     "label": "NHÀ GÁI",
-    "father": "ÔNG: TRẦN VĂN THẮNG",
-    "mother": "BÀ: MAI THỊ NHƯỜNG",
+    "father": "ÔNG: PHẠM VĂN CHUYỂN",
+    "mother": "BÀ: NGUYỄN THỊ LOAN",
     "role": "Cô Dâu",
-    "name": "Trần Ngọc",
+    "name": "Phạm Nguyệt",
     "brideAlt": "Cô dâu"
   },
   "invitation": {
     "title": "Thư Mời",
-    "subtitle": "THAM DỰ LỄ CƯỚI CỦA ĐỨC DŨNG & TRẦN NGỌC"
+    "subtitle": "THAM DỰ LỄ CƯỚI CỦA NGUYỄN THẮNG & PHẠM NGUYỆT"
   },
   "party": {
     "groom": {
       "title": "TIỆC CƯỚI NHÀ TRAI",
-      "date": "22.03.2026",
-      "time": "CHỦ NHẬT | 11H00",
-      "lunarDate": "Tức Ngày 04 Tháng 02 Năm Bính Ngọ",
-      "venue": "Trung tâm Hội nghị - Tiệc cưới - Nhà hàng 500 Tổ 2, Khu 7, Phường Giếng Đáy, TP Hạ Long, Quảng Ninh",
+      "date": "06.06.2026",
+      "time": "THỨ BẢY | 15H00",
+      "lunarDate": "Tức ngày 21 tháng 04 năm Bính Ngọ",
+      "venue": "Tư gia nhà trai — Số nhà 5, ngõ 56 phố Lửa Việt, xã Hạ Hòa, tỉnh Phú Thọ",
       "cta": "GỬI MỪNG CƯỚI",
       "dialogTitle": "Xác nhận tham dự - Tiệc nhà Trai"
     },
     "bride": {
       "title": "TIỆC CƯỚI NHÀ GÁI",
-      "date": "21.03.2026",
-      "time": "THỨ 7 | 16H00",
-      "lunarDate": "Tức Ngày 03 Tháng 02 Năm Bính Ngọ",
-      "venue": "Xóm 7 xã Nam Hưng, Huyện Tiền Hải, Tỉnh Thái Bình",
+      "date": "06.06.2026",
+      "time": "THỨ BẢY | 15H00",
+      "lunarDate": "Tức ngày 21 tháng 04 năm Bính Ngọ",
+      "venue": "Tư gia nhà trai — Số nhà 5, ngõ 56 phố Lửa Việt, xã Hạ Hòa, tỉnh Phú Thọ",
       "cta": "GỬI MỪNG CƯỚI",
       "dialogTitle": "Xác nhận tham dự - Tiệc nhà Gái"
     }
@@ -64,7 +64,7 @@
   },
   "saveTheDate": {
     "title": "SAVE THE DATE",
-    "monthYear": "THÁNG 3 - 2026",
+    "monthYear": "THÁNG 6 - 2026",
     "weekdays": ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
   },
   "alert": {
@@ -75,9 +75,9 @@
   "venue": {
     "title": "Địa điểm tổ chức",
     "groomLabel": "NHÀ TRAI",
-    "groomAddress": "Trung tâm Hội nghị - Tiệc cưới - Nhà hàng 500 Tổ 2, Khu 7, Phường Giếng Đáy, TP Hạ Long, Quảng Ninh",
+    "groomAddress": "SN 5, Ngõ 56 phố Lửa Việt, X. Hạ Hòa, T. Phú Thọ",
     "brideLabel": "NHÀ GÁI",
-    "brideAddress": "Xóm 7 xã Nam Hưng, Huyện Tiền Hải, Tỉnh Thái Bình"
+    "brideAddress": "Đông Nam Phong, X. Nam Đồng, T. Ninh Bình"
   },
   "album": {
     "title": "Album hình cưới"

@@ -120,16 +120,26 @@
   }
   html {
     overflow-x: hidden;
+    overscroll-behavior: none;
     -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
   }
   body {
     @apply bg-background text-foreground;
     font-family: "Quicksand", sans-serif;
     margin: 0;
-    min-height: 100vh;
     width: 100%;
+    min-height: 100dvh;
     overflow-x: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
   }
+}
+
+/* Vùng cuộn chính: cuộn được, không kéo rubber-band ra ngoài */
+.invite-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 /* Font BlackMango - URL được inject từ main.tsx theo BASE để đúng GitHub Pages */
@@ -198,6 +208,43 @@
   animation: heart-blink 1.4s ease-in-out infinite;
 }
 
+@keyframes image-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.image-skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(133, 73, 28, 0.08) 0%,
+    rgba(133, 73, 28, 0.18) 45%,
+    rgba(133, 73, 28, 0.08) 90%
+  );
+  background-size: 200% 100%;
+  animation: image-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.album-grid__cell {
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: rgba(133, 73, 28, 0.06);
+}
+
+.album-grid__cell > * {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  min-height: 0;
+}
+
 /* Giảm lag scroll: không vẽ section khi xa viewport */
 .content-visibility-section {
   content-visibility: auto;
@@ -205,6 +252,12 @@
 }
 
 /* Ghi đè div bên trong Radix ScrollArea Viewport (style mặc định: display: table; min-width: 100%) */
+[data-radix-scroll-area-viewport],
+[data-slot="scroll-area-viewport"] {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 [data-radix-scroll-area-viewport] > div {
   display: block !important;
   min-width: 100%;

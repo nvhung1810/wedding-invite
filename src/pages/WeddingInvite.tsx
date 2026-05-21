@@ -22,7 +22,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { FallingBears } from "@/components/FallingBears";
 import { ImageWithSkeleton } from "@/components/ImageWithSkeleton";
@@ -53,19 +52,20 @@ const ALBUM_IMAGES = [
   "AN_03293_9.jpg",
 ] as const;
 
-const PRELOAD_IMAGES = [
+const PRELOAD_CRITICAL = [
   OVERLAY_BG,
   HERO_BG,
   `${BASE}AN_03293_10.jpg`,
   `${BASE}AN_03293.jpg`,
   `${BASE}AN_03293_4.jpg`,
-  ...ALBUM_IMAGES.map((name) => `${BASE}${name}`),
-  `${BASE}qr-bank.png`,
+];
+
+/** Không preload album — để skeleton hiện khi ảnh đang tải lần đầu */
+const PRELOAD_DEFERRED = [
+  `${BASE}qr-chure.jpg`,
+  `${BASE}qr-codau.jpg`,
   `${BASE}60x90.jpg`,
   `${BASE}thankyou.jpg`,
-  "https://content.pancake.vn/1/s840x1600/fwebp/65/3c/aa/be/35e135afc2c6420bc52abd8fb3768c346420d9efa7b879cd959ee353.png",
-  "https://content.pancake.vn/1/s489x489/fwebp/9f/06/d9/3a/4f89683f3c43ed295fd5da05de67d0db47eb178a7d68b96e19166749.png",
-  "https://content.pancake.vn/1/s1411x548/fwebp/cf/cf/28/5f/f9ca08165577556ed2df053b0962a0e8e670490844d7ad5e84fa48b2.png",
 ];
 
 export function WeddingInvite() {
@@ -80,10 +80,15 @@ export function WeddingInvite() {
   const FADE_OUT_MS = 850;
 
   useEffect(() => {
-    PRELOAD_IMAGES.forEach((src) => {
+    const preload = (src: string) => {
       const img = new Image();
       img.src = src;
-    });
+    };
+    PRELOAD_CRITICAL.forEach(preload);
+    const deferTimer = window.setTimeout(() => {
+      PRELOAD_DEFERRED.forEach(preload);
+    }, 1200);
+    return () => window.clearTimeout(deferTimer);
   }, []);
 
   const startMusic = () => {
@@ -117,24 +122,20 @@ export function WeddingInvite() {
       .catch(() => { });
   }, []);
 
-  // Khóa cuộn khi đang hiện overlay; chỉ mở được khi chạm, không cuộn
+  // Chỉ cuộn trong .invite-scroll; document không cuộn (tránh kéo ra vùng trống trên iOS)
   useEffect(() => {
-    if (!overlayVisible) return;
     const prevHtml = document.documentElement.style.overflow;
     const prevBody = document.body.style.overflow;
-    const prevTouch = document.body.style.touchAction;
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
     return () => {
       document.documentElement.style.overflow = prevHtml;
       document.body.style.overflow = prevBody;
-      document.body.style.touchAction = prevTouch;
     };
-  }, [overlayVisible]);
+  }, []);
 
   return (
-    <div className="relative min-h-screen bg-white text-[#85491c]">
+    <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-white text-[#85491c]">
       <audio ref={audioRef} src={BG_MUSIC_SRC} loop playsInline autoPlay preload="auto" />
       {/* Overlay: thiệp mở đầu – layout theo mẫu, nền BeautyPlus */}
       {overlayVisible && (
@@ -191,11 +192,11 @@ export function WeddingInvite() {
         </button>
       )}
       <div
-        className={`transition-all duration-700 ease-out ${overlayVisible && !overlayExiting ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"
+        className={`flex min-h-0 flex-1 flex-col transition-all duration-700 ease-out ${overlayVisible && !overlayExiting ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"
           }`}
       >
         {SHOW_FALLING_BEARS && <FallingBears />}
-        <ScrollArea className="relative z-10 h-screen w-full overflow-x-hidden">
+        <main className="invite-scroll relative z-10 min-h-0 flex-1 overflow-x-hidden overflow-y-auto w-full">
           <div className="min-w-0 w-full overflow-x-hidden">
             <div className="mx-auto w-full max-w-[420px]">
               {/* Hero */}
@@ -217,7 +218,7 @@ export function WeddingInvite() {
                   {t("hero.coupleName")}
                 </h2>
                 <div
-                  className="mt-4 w-full max-w-[360px] mx-auto overflow-hidden border-8 border-[#85491c]/20 shadow-sm aspect-[309/472] bg-[#fefcf6]"
+                  className="relative mt-4 w-full max-w-[360px] mx-auto overflow-hidden border-8 border-[#85491c]/20 shadow-sm aspect-[309/472] bg-[#fefcf6]"
                   style={{ borderColor: "rgba(133, 73, 28, 0.2)" }}
                 >
                   <ImageWithSkeleton
@@ -245,7 +246,7 @@ export function WeddingInvite() {
                   </div>
                 </div>
                 <section className="grid grid-cols-2 text-[#85491c] px-1">
-                  <div className="aspect-[3/4] overflow-hidden rounded border-2 border-[#85491c]/25 bg-[#fefcf6]">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded border-2 border-[#85491c]/25 bg-[#fefcf6]">
                     <ImageWithSkeleton
                       src={`${BASE}AN_03293.jpg`}
                       alt={t("groomSide.groomAlt")}
@@ -300,7 +301,7 @@ export function WeddingInvite() {
                       </p>
                     </div>
                   </div>
-                  <div className="aspect-[3/4] overflow-hidden rounded border-2 border-[#85491c]/25 bg-[#fefcf6]">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded border-2 border-[#85491c]/25 bg-[#fefcf6]">
                     <ImageWithSkeleton
                       src={`${BASE}AN_03293_4.jpg`}
                       alt={t("brideSide.brideAlt")}
@@ -614,7 +615,7 @@ export function WeddingInvite() {
                   </div>
                 </section>
 
-                {/* Album hình cưới - placeholder */}
+                {/* Album hình cưới */}
                 <section className="mt-8 content-visibility-section px-1">
                   <div className="flex items-center gap-3">
                     <p
@@ -636,7 +637,7 @@ export function WeddingInvite() {
                     </div>
                   </div>
                   <div
-                    className="mt-2 grid gap-2 w-full"
+                    className="album-grid mt-2 grid w-full gap-2"
                     style={{
                       gridTemplateColumns: "1fr 1fr",
                       gridTemplateRows: "1fr 1fr 1fr",
@@ -644,36 +645,73 @@ export function WeddingInvite() {
                     }}
                   >
                     {/* HÀNG 1 */}
-                    <div className="min-h-0 h-full w-full overflow-hidden bg-[#fefcf6]">
-                      <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[0]}`} alt="" loading="lazy" decoding="async" />
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[0]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
-                    <div className="min-h-0 h-full w-full overflow-hidden bg-[#fefcf6]">
-                      <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[1]}`} alt="" loading="lazy" decoding="async" />
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[1]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
 
                     {/* HÀNG 2: BỐ CỤC ĐẶC BIỆT */}
-                    <div className="min-h-0 h-full w-full overflow-hidden bg-[#fefcf6]">
-                      <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[2]}`} alt="" loading="lazy" decoding="async" />
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[2]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
-                    <div className="grid grid-rows-2 gap-2 min-h-0">
-                      <div className="min-h-0 overflow-hidden bg-[#fefcf6]">
+                    <div className="album-grid__stack grid h-full min-h-0 w-full grid-rows-2 gap-2">
+                      <div className="album-grid__cell">
                         <ImageWithSkeleton
                           src={`${BASE}${ALBUM_IMAGES[3]}`}
                           alt=""
                           className="object-[center_28%]"
+                          skeletonClassName="image-skeleton-shimmer"
                           loading="lazy"
                           decoding="async"
                         />
                       </div>
-                      <div className="min-h-0 overflow-hidden bg-[#fefcf6]">
-                        <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[4]}`} alt="" loading="lazy" decoding="async" />
+                      <div className="album-grid__cell">
+                        <ImageWithSkeleton
+                          src={`${BASE}${ALBUM_IMAGES[4]}`}
+                          alt=""
+                          skeletonClassName="image-skeleton-shimmer"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </div>
                     </div>
-                    <div className="min-h-0 h-full w-full overflow-hidden bg-[#fefcf6]">
-                      <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[5]}`} alt="" loading="lazy" decoding="async" />
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[5]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
-                    <div className="min-h-0 h-full w-full overflow-hidden bg-[#fefcf6]">
-                      <ImageWithSkeleton src={`${BASE}${ALBUM_IMAGES[6]}`} alt="" loading="lazy" decoding="async" />
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[6]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   </div>
                 </section>
@@ -708,7 +746,10 @@ export function WeddingInvite() {
                         }}
                       />
                       <div className="absolute bottom-2 flex justify-center z-10">
-                        <span className="text-white text-2xl font-medium font-['Great_Vibes',cursive] text-center">
+                        <span
+                          className="text-white text-2xl font-medium font-['Allura',cursive] text-center"
+                          style={{ fontFamily: "'Allura', 'Quicksand', sans-serif" }}
+                        >
                           {t("footer.welcome")}
                         </span>
                       </div>
@@ -718,7 +759,7 @@ export function WeddingInvite() {
               </div>
             </div>
           </div>
-        </ScrollArea>
+        </main>
       </div>
     </div>
   );

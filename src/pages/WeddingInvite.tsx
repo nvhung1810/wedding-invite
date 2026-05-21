@@ -35,7 +35,10 @@ const BASE = import.meta.env.BASE_URL;
 const BG_MUSIC_SRC = `${BASE}bg-music.mp3`;
 
 /** Tất cả ảnh dùng trong trang – preload khi mount để cuộn tới là sẵn sàng */
+const OVERLAY_BG = `${BASE}BeautyPlus-IMAGE-UPSCALER-1779371801363.png`;
+
 const PRELOAD_IMAGES = [
+  OVERLAY_BG,
   `${BASE}main-1.jpg`,
   `${BASE}3Q2A6279.JPG`,
   `${BASE}3Q2A6245.JPG`,
@@ -121,18 +124,21 @@ export function WeddingInvite() {
   return (
     <div className="relative min-h-screen bg-[white] text-stone-800">
       <audio ref={audioRef} src={BG_MUSIC_SRC} loop playsInline autoPlay preload="auto" />
-      {/* Overlay: giống ảnh – nền blur/bokeh, tên + nút Mở + Chạm để mở thiệp cưới */}
+      {/* Overlay: thiệp mở đầu – layout theo mẫu, nền BeautyPlus */}
       {overlayVisible && (
         <button
           type="button"
-          className={`overlay-enter-card fixed left-0 right-0 top-0 z-[200] mx-auto flex h-full min-h-[100dvh] w-full max-w-[420px] cursor-pointer flex-col items-center justify-between overflow-hidden px-2 py-12 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
+          className={`overlay-enter-card fixed left-0 right-0 top-0 z-[200] mx-auto h-full min-h-[100dvh] w-full max-w-[420px] cursor-pointer overflow-hidden outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
             }`}
           style={{
             minHeight: "100dvh",
-            backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 35%, transparent 65%, rgba(0,0,0,0.1) 100%), linear-gradient(180deg, rgba(226,236,255,0.31) 0%, rgba(226,236,255,0.31) 100%), url("${BASE}backgound-1.jpg")`,
+            backgroundColor: "#faf8f5",
+            backgroundImage: `url("${OVERLAY_BG}")`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center, center center, 20% center",
+            backgroundPosition: "center center",
+            fontFamily: '"Quicksand", sans-serif',
+            color: "#7a5c4f",
           }}
           onClick={startMusic}
           onTouchStart={() => startMusic()}
@@ -142,46 +148,36 @@ export function WeddingInvite() {
           }}
           aria-label={t("hero.tapToOpen")}
         >
-          <div className="mt-20 flex flex-col items-center text-center sm:mt-40">
-            <p
-              className="font-['Great_Vibes',cursive] text-3xl min-[376px]:text-4xl tracking-wide"
-              style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
-            >
-              {t("hero.coupleName")}
+          <div className="flex h-full min-h-[100dvh] flex-col px-7 pb-18 pt-40 sm:px-9 sm:pt-60">
+            <p className="text-left text-[10px] w-2/3 uppercase leading-relaxed tracking-[0.18em] sm:text-[12px]">
+              {t("hero.overlay.inviteLine")}
             </p>
-            <div
-              className="my-2 h-px w-50"
-              aria-hidden
-              style={{
-                background: "linear-gradient(90deg, transparent 0%, rgba(94,55,70,0.6) 50%, transparent 100%)",
-              }}
-            />
-            <p className="text-sm font-medium tracking-[0.2em]" style={{ color: "#6b4a52" }}>
-              {t("hero.saveTheDate")}
-            </p>
-          </div>
-          <div className="overlay-open-button relative flex flex-1 items-center justify-center">
-            <span className="overlay-open-glow" aria-hidden />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-[calc(50%+4rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0s" }} />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 translate-x-[calc(-50%+3.5rem)] -translate-y-1/2 overlay-sparkle" aria-hidden style={{ animationDelay: "0.3s" }} />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-[calc(50%+3rem)] -translate-y-[calc(-50%+2.5rem)] overlay-sparkle" aria-hidden style={{ animationDelay: "0.6s" }} />
-            <span className="overlay-open-circle flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg sm:h-28 sm:w-28">
-              <span
-                className="font-['Great_Vibes',cursive] text-3xl text-[#1e3a5f] sm:text-4xl"
-                style={{ fontFamily: "'Great Vibes', cursive" }}
-              >
-                {t("hero.open")}
-              </span>
-            </span>
-          </div>
 
-          {/* Dưới: Chạm để mở thiệp cưới */}
-          <p
-            className="font-['Great_Vibes',cursive] text-xl tracking-wide sm:text-2xl animate-overlay-text"
-            style={{ color: "#5e3746", textShadow: "0 1px 3px rgba(255,255,255,0.4)" }}
-          >
-            {t("hero.tapToOpen")}
-          </p>
+            <h1 className="mt-6 text-center text-[1.5rem] font-normal uppercase leading-snug tracking-[0.04em] sm:mt-8 sm:text-[2.5rem]">
+              {t("hero.coupleName")}
+            </h1>
+
+            <div className="flex-1 min-h-[2rem]" />
+
+            <div className="text-right">
+              <p className="text-md font-bold tracking-wide sm:text-[1.5rem]">
+                {t("hero.overlay.dateTime")}
+              </p>
+              <p className="mt-1 text-[10px] font-normal tracking-wide sm:text-sm mb-4">
+                {t("hero.overlay.lunarDate")}
+              </p>
+            </div>
+
+            <div className="overlay-divider my-5" aria-hidden />
+
+            <p className="whitespace-pre-line text-right text-xs font-light uppercase leading-snug tracking-[0.12em] sm:text-xs">
+              {t("hero.overlay.presenceMessage")}
+            </p>
+
+            <p className="mt-6 animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
+              {t("hero.tapToOpen")}
+            </p>
+          </div>
         </button>
       )}
       <div

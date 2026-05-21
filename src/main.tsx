@@ -21,6 +21,11 @@ fontStyle.textContent = `
   font-family: 'BlackMango';
   src: url('${base}fonts/BlackMango-Medium.woff2') format('woff2');
 }
+@font-face {
+  font-family: "TAN Mon Cheri";
+  src: url("${base}fonts/TANMonCheri-Regular.ttf") format("truetype");
+  font-display: swap;
+}
 `
 document.head.appendChild(fontStyle)
 

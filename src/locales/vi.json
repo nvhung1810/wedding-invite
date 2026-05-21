@@ -5,7 +5,13 @@
     "coupleName": "Nguyễn Thắng & Phạm Nguyệt",
     "coupleNameAria": "Nguyễn Thắng & Phạm Nguyệt",
     "tapToOpen": "Chạm để mở thiệp cưới",
-    "open": "Mở"
+    "open": "Mở",
+    "overlay": {
+      "inviteLine": "Trân trọng kính mời bạn tham dự lễ cưới của",
+      "dateTime": "15H00 | 06.06.2026",
+      "lunarDate": "(Tức ngày 21 tháng 04 năm Bính Ngọ)",
+      "presenceMessage": "Sự hiện diện của bạn là niềm vinh hạnh\ncủa gia đình chúng tôi !"
+    }
   },
   "quote": "Hôn nhân là chuyện cả đời,\nYêu người vừa ý, cưới người mình thương...",
   "groomSide": {

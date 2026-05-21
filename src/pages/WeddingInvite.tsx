@@ -62,6 +62,7 @@ const PRELOAD_IMAGES = [
   ...ALBUM_IMAGES.map((name) => `${BASE}${name}`),
   `${BASE}qr-bank.png`,
   `${BASE}60x90.jpg`,
+  `${BASE}thankyou.jpg`,
   "https://content.pancake.vn/1/s840x1600/fwebp/65/3c/aa/be/35e135afc2c6420bc52abd8fb3768c346420d9efa7b879cd959ee353.png",
   "https://content.pancake.vn/1/s489x489/fwebp/9f/06/d9/3a/4f89683f3c43ed295fd5da05de67d0db47eb178a7d68b96e19166749.png",
   "https://content.pancake.vn/1/s1411x548/fwebp/cf/cf/28/5f/f9ca08165577556ed2df053b0962a0e8e670490844d7ad5e84fa48b2.png",
@@ -180,11 +181,11 @@ export function WeddingInvite() {
                 <p className="overlay-layout__presence whitespace-pre-line text-right text-xs uppercase leading-snug">
                   {t("hero.overlay.presenceMessage")}
                 </p>
-
-                <p className="overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
-                  {t("hero.tapToOpen")}
-                </p>
               </div>
+
+              <p className="overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
+                {t("hero.tapToOpen")}
+              </p>
             </div>
           </div>
         </button>
@@ -695,7 +696,7 @@ export function WeddingInvite() {
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                       <div className="absolute inset-0 pointer-events-none" aria-hidden />
                       <ImageWithSkeleton
-                        src={`${BASE}thankyou.webp`}
+                        src={`${BASE}thankyou.jpg`}
                         alt=""
                         className="relative z-10 animate-overlay-text bg-contain bg-center bg-no-repeat shrink-0 pointer-events-auto object-contain"
                         fill={false}

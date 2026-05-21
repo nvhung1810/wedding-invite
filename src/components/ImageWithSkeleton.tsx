@@ -1,4 +1,4 @@
-import { useState, type ImgHTMLAttributes } from "react";
+import { useEffect, useRef, useState, type ImgHTMLAttributes } from "react";
 
 /** Cache URL ảnh đã load – cuộn lại sẽ hiển thị luôn, không load lại */
 const loadedImageUrls = new Set<string>();
@@ -18,14 +18,36 @@ export function ImageWithSkeleton({
   onLoad,
   ...props
 }: ImageWithSkeletonProps) {
+  const imgRef = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(() =>
     typeof src === "string" ? loadedImageUrls.has(src) : false
   );
 
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const markLoaded = () => {
     if (typeof src === "string") loadedImageUrls.add(src);
     setLoaded(true);
+  };
+
+  /** Ảnh từ cache đôi khi không fire onLoad — kiểm tra complete khi mount/đổi src */
+  useEffect(() => {
+    if (!src || typeof src !== "string" || loaded) return;
+    const el = imgRef.current;
+    if (el?.complete && el.naturalWidth > 0) {
+      markLoaded();
+      return;
+    }
+    const probe = new Image();
+    probe.src = src;
+    if (probe.complete && probe.naturalWidth > 0) markLoaded();
+  }, [src, loaded]);
+
+  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    markLoaded();
     onLoad?.(e);
+  };
+
+  const handleError = () => {
+    markLoaded();
   };
 
   return (
@@ -43,6 +65,8 @@ export function ImageWithSkeleton({
         />
       )}
       <img
+        {...props}
+        ref={imgRef}
         src={src}
         alt={alt}
         className={
@@ -55,7 +79,7 @@ export function ImageWithSkeleton({
               } ${className}`
         }
         onLoad={handleLoad}
-        {...props}
+        onError={handleError}
       />
     </div>
   );

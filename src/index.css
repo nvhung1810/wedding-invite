@@ -308,8 +308,13 @@
 }
 
 .overlay-layout__tap {
-  width: 100%;
-  margin: 1.5rem 0 0;
+  position: absolute;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  left: 8%;
+  right: 8%;
+  width: auto;
+  margin: 0;
+  text-align: center;
 }
 
 /* Overlay mở thiệp: fade out mượt + animation chữ */

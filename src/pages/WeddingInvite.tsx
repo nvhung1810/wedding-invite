@@ -258,7 +258,12 @@ export function WeddingInvite() {
                 <h1 className="overlay-layout__couple text-center text-[2.3rem] min-[400px]:text-[2.5rem] uppercase leading-snug tracking-[0.04em]">
                   {t("hero.coupleName")}
                 </h1>
-                <div className="overlay-layout__datetime pt-40">
+
+                <p className="animate-overlay-text text-center text-[12px] font-medium uppercase tracking-[0.22em] py-40">
+                  {t("hero.tapToOpen")}
+                </p>
+
+                <div className="overlay-layout__datetime">
                   <p className="text-[1.5rem] font-bold tracking-wide">
                     {t("hero.overlay.dateTime")}
                   </p>
@@ -276,10 +281,7 @@ export function WeddingInvite() {
                   {t("hero.overlay.presenceMessage")}
                 </p>
               </div>
-
-              <p className="overlay-layout__tap animate-overlay-text pb-4 text-center text-[10px] font-medium uppercase tracking-[0.22em]">
-                {t("hero.tapToOpen")}
-              </p>
+            
             </div>
           </div>
         </button>

@@ -46,10 +46,10 @@ const HERO_BG = `${BASE}hero-bg.png`;
 
 const ALBUM_IMAGES = [
   "AN_03293_2.jpg",
-  "AN_03293_5.jpg",
+  "AN_02574.jpg",
   "AN_03293_6.jpg",
-  "AN_03293_7.jpg",
-  "AN_03293_11.jpg",
+  "AN_03339.jpg",
+  "AN_03434.jpg",
   "AN_03293_8.jpg",
   "AN_03293_9.jpg",
 ] as const;
@@ -234,9 +234,8 @@ export function WeddingInvite() {
       {overlayVisible && (
         <button
           type="button"
-          className={`overlay-enter-card fixed top-0 z-[200] h-[100dvh] min-h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0 outline-none focus:ring-0 ${
-            overlayExiting ? "overlay-exiting" : ""
-          }`}
+          className={`overlay-enter-card fixed top-0 z-[200] h-[100dvh] min-h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
+            }`}
           style={{
             backgroundColor: COLOR_CREAM,
             fontFamily: '"Quicksand", sans-serif',
@@ -281,7 +280,7 @@ export function WeddingInvite() {
                   {t("hero.overlay.presenceMessage")}
                 </p>
               </div>
-            
+
             </div>
           </div>
         </button>
@@ -289,11 +288,10 @@ export function WeddingInvite() {
 
       {/* ── Main content (fades in as overlay exits) ─────────────────────────── */}
       <div
-        className={`flex min-h-0 flex-1 flex-col transition-all duration-700 ease-out ${
-          overlayVisible && !overlayExiting
-            ? "translate-y-6 opacity-0"
-            : "translate-y-0 opacity-100"
-        }`}
+        className={`flex min-h-0 flex-1 flex-col transition-all duration-700 ease-out ${overlayVisible && !overlayExiting
+          ? "translate-y-6 opacity-0"
+          : "translate-y-0 opacity-100"
+          }`}
       >
         {SHOW_FALLING_BEARS && <FallingBears />}
 
@@ -779,7 +777,7 @@ export function WeddingInvite() {
                         <ImageWithSkeleton
                           src={`${BASE}${ALBUM_IMAGES[3]}`}
                           alt=""
-                          className="object-[center_28%]"
+                          className="object-[center_20%]"
                           skeletonClassName="image-skeleton-shimmer"
                           loading="lazy"
                           decoding="async"
@@ -789,6 +787,7 @@ export function WeddingInvite() {
                         <ImageWithSkeleton
                           src={`${BASE}${ALBUM_IMAGES[4]}`}
                           alt=""
+                          className="object-[center_5%]"
                           skeletonClassName="image-skeleton-shimmer"
                           loading="lazy"
                           decoding="async"

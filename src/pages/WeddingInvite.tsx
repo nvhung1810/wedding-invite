@@ -30,18 +30,20 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const BASE = import.meta.env.BASE_URL;
+
 const BG_MUSIC_SRC = `${BASE}bg-music.mp3`;
 const COLOR_CREAM = "#fefcf6";
 const COLOR_BROWN = "#85491c";
-/** Tạm ẩn gấu rơi — đổi thành true để bật lại */
+
+/** Set to true to re-enable the falling bears easter egg */
 const SHOW_FALLING_BEARS = false;
 
-/** Tất cả ảnh dùng trong trang – preload khi mount để cuộn tới là sẵn sàng */
 const OVERLAY_BG = `${BASE}BeautyPlus-IMAGE-UPSCALER-1779371801363.png`;
 const HERO_BG = `${BASE}hero-bg.png`;
 
-/** Album: các ảnh AN_03293 (trừ 3 ảnh đã dùng ở hero / nhà trai / nhà gái) */
 const ALBUM_IMAGES = [
   "AN_03293_2.jpg",
   "AN_03293_5.jpg",
@@ -52,77 +54,107 @@ const ALBUM_IMAGES = [
   "AN_03293_9.jpg",
 ] as const;
 
-const PRELOAD_CRITICAL = [
+/**
+ * Preload strategy — 3 waves fired while the overlay is visible.
+ * Goal: by the time the user taps to open, every image is already
+ * in the browser cache so scrolling is jank-free.
+ *
+ * Wave 1 (0 ms)   — overlay assets + above-the-fold hero image.
+ *                   Must be in cache before the overlay even paints.
+ * Wave 2 (400 ms) — images visible immediately after opening
+ *                   (portraits, first album row). User is still
+ *                   reading the overlay text at this point.
+ * Wave 3 (900 ms) — remaining album images, QR codes, footer.
+ *                   Fires well before the average user taps (~2–3 s).
+ *
+ * Waves are intentionally small so requests don't compete for bandwidth.
+ */
+const PRELOAD_WAVE_1 = [
   OVERLAY_BG,
   HERO_BG,
-  `${BASE}AN_03293_10.jpg`,
-  `${BASE}AN_03293.jpg`,
-  `${BASE}AN_03293_4.jpg`,
+  `${BASE}AN_03293_10.jpg`,   // hero couple photo
 ];
 
-/** Không preload album — để skeleton hiện khi ảnh đang tải lần đầu */
-const PRELOAD_DEFERRED = [
+const PRELOAD_WAVE_2 = [
+  `${BASE}AN_03293.jpg`,       // groom portrait
+  `${BASE}AN_03293_4.jpg`,     // bride portrait
+  `${BASE}${ALBUM_IMAGES[0]}`, // album row 1
+  `${BASE}${ALBUM_IMAGES[1]}`,
+];
+
+const PRELOAD_WAVE_3 = [
+  `${BASE}${ALBUM_IMAGES[2]}`, // album rows 2–3
+  `${BASE}${ALBUM_IMAGES[3]}`,
+  `${BASE}${ALBUM_IMAGES[4]}`,
+  `${BASE}${ALBUM_IMAGES[5]}`,
+  `${BASE}${ALBUM_IMAGES[6]}`,
   `${BASE}qr-chure.jpg`,
   `${BASE}qr-codau.jpg`,
-  `${BASE}60x90.jpg`,
   `${BASE}thankyou.jpg`,
 ];
 
+const OVERLAY_FADE_MS = 850;
+
+// ─── Calendar helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Builds a padded day array for a given year/month so the first cell aligns
+ * with the correct weekday column (Mon = 0 … Sun = 6).
+ * Returns null for empty leading/trailing cells.
+ *
+ * NOTE: June 2026 starts on Monday (offset = 0), so no leading nulls are
+ * needed for that specific month — but keeping this generic makes it safe if
+ * the month is ever changed.
+ */
+function buildCalendarDays(year: number, month: number): (number | null)[] {
+  const firstDay = new Date(year, month - 1, 1).getDay(); // 0 = Sun … 6 = Sat
+  // Convert Sun-based (0–6) to Mon-based (0–6)
+  const offset = (firstDay + 6) % 7;
+  const daysInMonth = new Date(year, month, 0).getDate();
+
+  const cells: (number | null)[] = Array(offset).fill(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  return cells;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export function WeddingInvite() {
   const { t } = useTranslation();
+
   const [invalidCodeOpen, setInvalidCodeOpen] = useState(false);
-  const [rsvpOpen, setRsvpOpen] = useState<string | null>(null);
+  const [rsvpOpen, setRsvpOpen] = useState<"trai" | "gai" | null>(null);
   const [overlayVisible, setOverlayVisible] = useState(true);
   const [overlayExiting, setOverlayExiting] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement>(null);
-  const startedRef = useRef(false);
+  const musicStarted = useRef(false);
 
-  const FADE_OUT_MS = 850;
-
+  // ── Image preloading — 3 waves while the overlay is visible ────────────────
   useEffect(() => {
     const preload = (src: string) => {
       const img = new Image();
       img.src = src;
     };
-    PRELOAD_CRITICAL.forEach(preload);
-    const deferTimer = window.setTimeout(() => {
-      PRELOAD_DEFERRED.forEach(preload);
-    }, 1200);
-    return () => window.clearTimeout(deferTimer);
+
+    // Wave 1: fire immediately — overlay bg must be ready before first paint.
+    PRELOAD_WAVE_1.forEach(preload);
+
+    // Wave 2: portraits + first album row. 400 ms gives Wave 1 a head start
+    // without waiting so long that the user taps before these are cached.
+    const t2 = window.setTimeout(() => PRELOAD_WAVE_2.forEach(preload), 400);
+
+    // Wave 3: rest of album + footer assets. By 900 ms the average user is
+    // still on the overlay (typical dwell ~2–4 s), so these arrive in time.
+    const t3 = window.setTimeout(() => PRELOAD_WAVE_3.forEach(preload), 900);
+
+    return () => {
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+    };
   }, []);
 
-  const startMusic = () => {
-    if (startedRef.current) return;
-    const el = audioRef.current;
-    if (!el) return;
-    startedRef.current = true;
-    // Chỉ gọi play() đồng bộ trong user gesture; setState để sau (tránh re-render cắt gesture)
-    el.play().catch(() => {
-      startedRef.current = false;
-    });
-    setTimeout(() => setOverlayExiting(true), 0);
-  };
-
-  // Unmount overlay sau khi fade out xong
-  useEffect(() => {
-    if (!overlayExiting) return;
-    const t = setTimeout(() => setOverlayVisible(false), FADE_OUT_MS);
-    return () => clearTimeout(t);
-  }, [overlayExiting]);
-
-  // Thử autoplay khi mount; nếu được thì fade out overlay luôn
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    el.play()
-      .then(() => {
-        startedRef.current = true;
-        setOverlayExiting(true);
-      })
-      .catch(() => { });
-  }, []);
-
-  // Chỉ cuộn trong .invite-scroll; document không cuộn (tránh kéo ra vùng trống trên iOS)
+  // ── Prevent document scroll (scroll happens inside .invite-scroll only) ─────
   useEffect(() => {
     const prevHtml = document.documentElement.style.overflow;
     const prevBody = document.body.style.overflow;
@@ -134,26 +166,84 @@ export function WeddingInvite() {
     };
   }, []);
 
+  // ── Attempt silent autoplay on mount; dismiss overlay if it succeeds ────────
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.play()
+      .then(() => {
+        musicStarted.current = true;
+        setOverlayExiting(true);
+      })
+      .catch(() => {
+        // Autoplay blocked — overlay stays visible so the user can tap to start.
+      });
+  }, []);
+
+  // ── Unmount overlay node after the CSS fade-out finishes ────────────────────
+  useEffect(() => {
+    if (!overlayExiting) return;
+    const timer = window.setTimeout(
+      () => setOverlayVisible(false),
+      OVERLAY_FADE_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [overlayExiting]);
+
+  // ── Start music + dismiss overlay on user gesture ──────────────────────────
+  // BUG FIX: previously called by both onTouchStart AND onTouchEnd on the overlay
+  // button, causing two synchronous play() attempts (guard protected, but noisy).
+  // Now only onTouchEnd (+ onClick for pointer devices) is used, and
+  // e.preventDefault() is called before the handler so iOS doesn't fire a
+  // synthetic click after touchend.
+  const startMusic = () => {
+    if (musicStarted.current) return;
+    const el = audioRef.current;
+    if (!el) return;
+
+    musicStarted.current = true;
+    el.play().catch(() => {
+      musicStarted.current = false;
+    });
+
+    // Kick off the overlay exit animation without blocking the user-gesture frame.
+    setTimeout(() => setOverlayExiting(true), 0);
+  };
+
+  const handleOverlayTouchEnd = (e: React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // prevent the subsequent synthetic click
+    startMusic();
+  };
+
+  // ── Calendar data ───────────────────────────────────────────────────────────
+  const calendarDays = buildCalendarDays(2026, 6);
+
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="relative flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-white text-[#85491c]">
-      <audio ref={audioRef} src={BG_MUSIC_SRC} loop playsInline autoPlay preload="auto" />
-      {/* Overlay: thiệp mở đầu – layout theo mẫu, nền BeautyPlus */}
+      <audio
+        ref={audioRef}
+        src={BG_MUSIC_SRC}
+        loop
+        playsInline
+        autoPlay
+        preload="auto"
+      />
+
+      {/* ── Opening overlay ─────────────────────────────────────────────────── */}
       {overlayVisible && (
         <button
           type="button"
-          className={`overlay-enter-card fixed top-0 z-[200] h-[100dvh] min-h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0 outline-none focus:ring-0 ${overlayExiting ? "overlay-exiting" : ""
-            }`}
+          className={`overlay-enter-card fixed top-0 z-[200] h-[100dvh] min-h-[100dvh] w-full cursor-pointer overflow-hidden border-0 p-0 outline-none focus:ring-0 ${
+            overlayExiting ? "overlay-exiting" : ""
+          }`}
           style={{
             backgroundColor: COLOR_CREAM,
             fontFamily: '"Quicksand", sans-serif',
             color: COLOR_BROWN,
           }}
           onClick={startMusic}
-          onTouchStart={() => startMusic()}
-          onTouchEnd={(e) => {
-            startMusic();
-            e.preventDefault();
-          }}
+          onTouchEnd={handleOverlayTouchEnd}
           aria-label={t("hero.tapToOpen")}
         >
           <div
@@ -162,44 +252,54 @@ export function WeddingInvite() {
           >
             <div className="overlay-layout">
               <div className="overlay-layout__cluster">
-                <p className="overlay-layout__invite text-left text-base uppercase leading-relaxed w-2/3">
+                <p className="overlay-layout__invite w-2/3 text-left text-base uppercase leading-relaxed">
                   {t("hero.overlay.inviteLine")}
                 </p>
                 <h1 className="overlay-layout__couple text-center text-[2.3rem] min-[400px]:text-[2.5rem] uppercase leading-snug tracking-[0.04em]">
                   {t("hero.coupleName")}
                 </h1>
                 <div className="overlay-layout__datetime pt-40">
-                  <p className="font-bold tracking-wide text-[1.5rem]">
+                  <p className="text-[1.5rem] font-bold tracking-wide">
                     {t("hero.overlay.dateTime")}
                   </p>
-                  <p className="mt-1 font-normal tracking-wide text-xs">
+                  <p className="mt-1 text-xs font-normal tracking-wide">
                     {t("hero.overlay.lunarDate")}
                   </p>
                 </div>
 
-                <div className="overlay-layout__divider overlay-divider" aria-hidden />
+                <div
+                  className="overlay-layout__divider overlay-divider"
+                  aria-hidden
+                />
 
                 <p className="overlay-layout__presence whitespace-pre-line text-right text-xs uppercase leading-snug">
                   {t("hero.overlay.presenceMessage")}
                 </p>
               </div>
 
-              <p className="pb-4 overlay-layout__tap animate-overlay-text text-center text-[10px] font-medium uppercase tracking-[0.22em]">
+              <p className="overlay-layout__tap animate-overlay-text pb-4 text-center text-[10px] font-medium uppercase tracking-[0.22em]">
                 {t("hero.tapToOpen")}
               </p>
             </div>
           </div>
         </button>
       )}
+
+      {/* ── Main content (fades in as overlay exits) ─────────────────────────── */}
       <div
-        className={`flex min-h-0 flex-1 flex-col transition-all duration-700 ease-out ${overlayVisible && !overlayExiting ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"
-          }`}
+        className={`flex min-h-0 flex-1 flex-col transition-all duration-700 ease-out ${
+          overlayVisible && !overlayExiting
+            ? "translate-y-6 opacity-0"
+            : "translate-y-0 opacity-100"
+        }`}
       >
         {SHOW_FALLING_BEARS && <FallingBears />}
-        <main className="invite-scroll relative z-10 min-h-0 flex-1 overflow-x-hidden overflow-y-auto w-full">
+
+        <main className="invite-scroll relative z-10 min-h-0 w-full flex-1 overflow-x-hidden overflow-y-auto">
           <div className="min-w-0 w-full overflow-x-hidden">
             <div className="mx-auto w-full max-w-[420px]">
-              {/* Hero */}
+
+              {/* ── Hero ───────────────────────────────────────────────────── */}
               <section
                 className="text-center"
                 style={{
@@ -218,7 +318,7 @@ export function WeddingInvite() {
                   {t("hero.coupleName")}
                 </h2>
                 <div
-                  className="relative mt-4 w-full max-w-[360px] mx-auto overflow-hidden border-8 border-[#85491c]/20 shadow-sm aspect-[309/472] bg-[#fefcf6]"
+                  className="relative mx-auto mt-4 w-full max-w-[360px] overflow-hidden border-8 border-[#85491c]/20 shadow-sm aspect-[309/472] bg-[#fefcf6]"
                   style={{ borderColor: "rgba(133, 73, 28, 0.2)" }}
                 >
                   <ImageWithSkeleton
@@ -232,20 +332,20 @@ export function WeddingInvite() {
                 </div>
               </section>
 
-              <div
-                style={{
-                  background: COLOR_CREAM,
-                }}
-              >
+              <div style={{ background: COLOR_CREAM }}>
+
+                {/* ── Quote ────────────────────────────────────────────────── */}
                 <div className="py-4">
                   <div
-                    className="text-center text-xl font-medium font-['Great_Vibes',cursive] whitespace-pre-line"
+                    className="whitespace-pre-line text-center text-xl font-medium font-['Great_Vibes',cursive]"
                     style={{ color: COLOR_BROWN }}
                   >
-                    “{t("quote")}”
+                    "{t("quote")}"
                   </div>
                 </div>
-                <section className="grid grid-cols-2 text-[#85491c] px-1">
+
+                {/* ── Groom / Bride intro grid ──────────────────────────────── */}
+                <section className="grid grid-cols-2 px-1 text-[#85491c]">
                   <div className="relative aspect-[3/4] overflow-hidden rounded border-2 border-[#85491c]/25 bg-[#fefcf6]">
                     <ImageWithSkeleton
                       src={`${BASE}AN_03293.jpg`}
@@ -272,13 +372,14 @@ export function WeddingInvite() {
                         {t("groomSide.role")}
                       </p>
                       <p
-                        className="mt-1 text-3xl font-normal text-[#85491c] pt-2"
+                        className="mt-1 pt-2 text-3xl font-normal text-[#85491c]"
                         style={{ fontFamily: "'Great Vibes', cursive" }}
                       >
                         {t("groomSide.name")}
                       </p>
                     </div>
                   </div>
+
                   <div className="flex flex-col items-center justify-center text-center">
                     <p className="text-xs font-bold uppercase tracking-widest">
                       {t("brideSide.label")}
@@ -294,7 +395,7 @@ export function WeddingInvite() {
                         {t("brideSide.role")}
                       </p>
                       <p
-                        className="mt-1 text-3xl font-normal text-[#85491c] pt-2"
+                        className="mt-1 pt-2 text-3xl font-normal text-[#85491c]"
                         style={{ fontFamily: "'Great Vibes', cursive" }}
                       >
                         {t("brideSide.name")}
@@ -314,7 +415,8 @@ export function WeddingInvite() {
 
                 <Separator className="my-8 bg-[#85491c]/25" />
 
-                <section className="text-center content-visibility-section">
+                {/* ── Invitation heading ────────────────────────────────────── */}
+                <section className="content-visibility-section text-center">
                   <p className="text-3xl tracking-widest text-[#85491c] font-['Allura',cursive]">
                     {t("invitation.title")}
                   </p>
@@ -323,13 +425,10 @@ export function WeddingInvite() {
                   </h2>
                 </section>
 
-                {/* Tiệc cưới Nhà Trai */}
-                <Card className="mt-8 mx-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] shadow-sm content-visibility-section">
-                  <CardHeader className="text-center gap-0">
-                    <CardTitle
-                      className="text-lg tracking-wide text-[#85491c]"
-                      style={{ color: COLOR_BROWN }}
-                    >
+                {/* ── Party card — Groom side ───────────────────────────────── */}
+                <Card className="content-visibility-section mt-8 mx-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] shadow-sm">
+                  <CardHeader className="gap-0 text-center">
+                    <CardTitle className="text-lg tracking-wide text-[#85491c]">
                       {t("party.groom.title")}
                     </CardTitle>
                   </CardHeader>
@@ -348,7 +447,9 @@ export function WeddingInvite() {
                   <CardFooter className="justify-center">
                     <Dialog
                       open={rsvpOpen === "trai"}
-                      onOpenChange={(o) => setRsvpOpen(o ? "trai" : null)}
+                      onOpenChange={(open) =>
+                        setRsvpOpen(open ? "trai" : null)
+                      }
                     >
                       <DialogTrigger asChild>
                         <Button
@@ -361,12 +462,12 @@ export function WeddingInvite() {
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-md rounded-xl bg-[#fefcf6] shadow-lg">
                         <DialogHeader>
-                          <DialogTitle className="font-['Allura',cursive] text-4xl text-[#85491c] text-center">
+                          <DialogTitle className="font-['Allura',cursive] text-center text-4xl text-[#85491c]">
                             {t("gift.modalTitle")}
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] p-1 bg-[#fefcf6]">
+                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] bg-[#fefcf6] p-1">
                             <ImageWithSkeleton
                               src={`${BASE}qr-chure.jpg`}
                               alt="QR chuyển khoản chú rể"
@@ -375,7 +476,7 @@ export function WeddingInvite() {
                               decoding="async"
                             />
                           </div>
-                          <p className="text-base font-medium text-[#85491c]/90 text-center">
+                          <p className="text-center text-base font-medium text-[#85491c]/90">
                             {t("gift.bankInfoGroom")}
                           </p>
                         </div>
@@ -384,13 +485,10 @@ export function WeddingInvite() {
                   </CardFooter>
                 </Card>
 
-                {/* Tiệc cưới Nhà Gái */}
-                <Card className="mt-6 mx-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] shadow-sm content-visibility-section">
-                  <CardHeader className="text-center gap-0">
-                    <CardTitle
-                      className="text-lg tracking-wide text-[#85491c]"
-                      style={{ color: COLOR_BROWN }}
-                    >
+                {/* ── Party card — Bride side ───────────────────────────────── */}
+                <Card className="content-visibility-section mt-6 mx-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] shadow-sm">
+                  <CardHeader className="gap-0 text-center">
+                    <CardTitle className="text-lg tracking-wide text-[#85491c]">
                       {t("party.bride.title")}
                     </CardTitle>
                   </CardHeader>
@@ -409,7 +507,9 @@ export function WeddingInvite() {
                   <CardFooter className="justify-center">
                     <Dialog
                       open={rsvpOpen === "gai"}
-                      onOpenChange={(o) => setRsvpOpen(o ? "gai" : null)}
+                      onOpenChange={(open) =>
+                        setRsvpOpen(open ? "gai" : null)
+                      }
                     >
                       <DialogTrigger asChild>
                         <Button
@@ -422,12 +522,12 @@ export function WeddingInvite() {
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-md rounded-xl bg-[#fefcf6] shadow-lg">
                         <DialogHeader>
-                          <DialogTitle className="font-['Allura',cursive] text-4xl text-[#85491c] text-center">
+                          <DialogTitle className="font-['Allura',cursive] text-center text-4xl text-[#85491c]">
                             {t("gift.modalTitle")}
                           </DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col items-center gap-4">
-                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] p-1 bg-[#fefcf6]">
+                          <div className="relative aspect-square w-[min(240px,calc(100vw-4rem))] border-4 border-[#85491c] bg-[#fefcf6] p-1">
                             <ImageWithSkeleton
                               src={`${BASE}qr-codau.jpg`}
                               alt="QR chuyển khoản cô dâu"
@@ -436,7 +536,7 @@ export function WeddingInvite() {
                               decoding="async"
                             />
                           </div>
-                          <p className="text-base font-medium text-[#85491c]/90 text-center">
+                          <p className="text-center text-base font-medium text-[#85491c]/90">
                             {t("gift.bankInfoBride")}
                           </p>
                         </div>
@@ -445,8 +545,8 @@ export function WeddingInvite() {
                   </CardFooter>
                 </Card>
 
-                {/* Save The Date - Tháng 6 / 2026, highlight 06 */}
-                <section className="mx-6 mt-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] px-4 py-6 shadow-sm content-visibility-section">
+                {/* ── Save-the-date calendar ────────────────────────────────── */}
+                <section className="content-visibility-section mx-6 mt-6 rounded-2xl border border-solid border-[#85491c]/15 bg-[#fefcf6] px-4 py-6 shadow-sm">
                   <p
                     className="text-center text-3xl font-medium tracking-wide font-['Allura',cursive]"
                     style={{ color: COLOR_BROWN }}
@@ -459,7 +559,9 @@ export function WeddingInvite() {
                   >
                     {t("saveTheDate.monthYear")}
                   </p>
+
                   <div className="mt-4 overflow-hidden rounded-lg">
+                    {/* Weekday header */}
                     <div
                       className="grid grid-cols-7 text-center text-xs font-medium text-[#fefcf6]"
                       style={{ background: COLOR_BROWN }}
@@ -474,58 +576,54 @@ export function WeddingInvite() {
                         </div>
                       ))}
                     </div>
+
+                    {/* Day cells */}
                     <div className="grid grid-cols-7 gap-0 border border-t-0 border-[#85491c]/15 bg-[#fefcf6]">
-                      {(() => {
-                        // 1/6/2026 là Thứ hai → 0 ô trống, rồi 1..30
-                        const days: (number | null)[] = [];
-                        for (let d = 1; d <= 30; d++) days.push(d);
-                        return days.map((d, i) => {
-                          const col = i % 7;
-                          const isSunday = col === 6;
-                          const isHighlight = d === 6;
-                          return (
-                            <div
-                              key={i}
-                              className="relative flex min-h-[36px] items-center justify-center border-b border-r border-[#85491c]/15 py-1 last:border-r-0"
-                              style={{
-                                borderRightWidth: col < 6 ? 1 : 0,
-                              }}
-                            >
-                              {d != null ? (
-                                <>
+                      {calendarDays.map((day, i) => {
+                        const col = i % 7;
+                        const isSunday = col === 6;
+                        const isHighlight = day === 6;
+
+                        return (
+                          <div
+                            key={i}
+                            className="relative flex min-h-[36px] items-center justify-center border-b border-[#85491c]/15 py-1"
+                            style={{ borderRightWidth: col < 6 ? 1 : 0 }}
+                          >
+                            {day !== null && (
+                              <>
+                                <span
+                                  className={`text-sm tabular-nums ${isSunday ? "font-bold" : "font-normal"}`}
+                                  style={{
+                                    color: isSunday
+                                      ? COLOR_BROWN
+                                      : "rgba(133, 73, 28, 0.65)",
+                                  }}
+                                >
+                                  {day}
+                                </span>
+                                {isHighlight && (
                                   <span
-                                    className={`text-sm tabular-nums ${isSunday ? "font-bold" : "font-normal"
-                                      }`}
+                                    className="pointer-events-none absolute top-1/2 block animate-heart-blink"
                                     style={{
-                                      color: isSunday
-                                        ? COLOR_BROWN
-                                        : "rgba(133, 73, 28, 0.65)",
+                                      width: 89,
+                                      height: 89,
+                                      left: "50%",
+                                      transform:
+                                        "translate(calc(-50% + 0px), calc(-50% + 7px))",
+                                      background:
+                                        'center center / cover no-repeat scroll content-box border-box url("https://content.pancake.vn/1/s489x489/fwebp/9f/06/d9/3a/4f89683f3c43ed295fd5da05de67d0db47eb178a7d68b96e19166749.png")',
                                     }}
-                                  >
-                                    {d}
-                                  </span>
-                                  {isHighlight && (
-                                    <span
-                                      className="pointer-events-none absolute top-1/2 block animate-heart-blink"
-                                      style={{
-                                        width: 89,
-                                        height: 89,
-                                        left: "50%",
-                                        transform:
-                                          "translate(calc(-50% + 0px), calc(-50% + 7px))",
-                                        background:
-                                          'center center / cover no-repeat scroll content-box border-box url("https://content.pancake.vn/1/s489x489/fwebp/9f/06/d9/3a/4f89683f3c43ed295fd5da05de67d0db47eb178a7d68b96e19166749.png")',
-                                      }}
-                                    />
-                                  )}
-                                </>
-                              ) : null}
-                            </div>
-                          );
-                        });
-                      })()}
+                                  />
+                                )}
+                              </>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
+
                   <div className="mt-4 flex justify-end">
                     <svg
                       className="h-4 w-24 text-[#85491c]"
@@ -538,7 +636,7 @@ export function WeddingInvite() {
                       <path d="M0 8 Q24 2 48 8 T96 8" />
                     </svg>
                     <svg
-                      className="ml-1 h-4 w-4 flex-shrink-0 text-[#85491c]"
+                      className="ml-1 h-4 w-4 shrink-0 text-[#85491c]"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
@@ -547,7 +645,7 @@ export function WeddingInvite() {
                   </div>
                 </section>
 
-                {/* AlertDialog: Expired or Invalid Code (demo) */}
+                {/* ── Invalid-code alert (kept for future use) ──────────────── */}
                 <AlertDialog
                   open={invalidCodeOpen}
                   onOpenChange={setInvalidCodeOpen}
@@ -562,15 +660,17 @@ export function WeddingInvite() {
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogAction onClick={() => setInvalidCodeOpen(false)}>
+                      <AlertDialogAction
+                        onClick={() => setInvalidCodeOpen(false)}
+                      >
                         {t("alert.ok")}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
 
-                {/* Địa điểm tổ chức */}
-                <section className="mt-8 content-visibility-section px-1">
+                {/* ── Venue section ─────────────────────────────────────────── */}
+                <section className="content-visibility-section mt-8 px-1">
                   <div className="overflow-hidden rounded-t-3xl bg-[#fefcf6] px-5 pb-8 pt-8 text-center">
                     <p
                       className="mb-4 text-3xl text-[#85491c]"
@@ -615,19 +715,16 @@ export function WeddingInvite() {
                   </div>
                 </section>
 
-                {/* Album hình cưới */}
-                <section className="mt-8 content-visibility-section px-1">
+                {/* ── Wedding album ──────────────────────────────────────────── */}
+                <section className="content-visibility-section mt-8 px-1">
                   <div className="flex items-center gap-3">
                     <p
                       className="shrink-0 text-2xl font-semibold"
-                      style={{
-                        fontFamily: "Allura, cursive",
-                        color: COLOR_BROWN,
-                      }}
+                      style={{ fontFamily: "Allura, cursive", color: COLOR_BROWN }}
                     >
                       {t("album.title")}
                     </p>
-                    <div className="relative flex-1 border-t border-[#85491c]/30 pt-0">
+                    <div className="relative flex-1 border-t border-[#85491c]/30">
                       <span className="absolute left-1/2 top-0 flex h-0 w-0 -translate-x-1/2 -translate-y-1/2 justify-center">
                         <ChevronDown
                           className="h-4 w-4 text-[#85491c]"
@@ -636,6 +733,7 @@ export function WeddingInvite() {
                       </span>
                     </div>
                   </div>
+
                   <div
                     className="album-grid mt-2 grid w-full gap-2"
                     style={{
@@ -644,7 +742,7 @@ export function WeddingInvite() {
                       aspectRatio: "378/851",
                     }}
                   >
-                    {/* HÀNG 1 */}
+                    {/* Row 1 */}
                     <div className="album-grid__cell">
                       <ImageWithSkeleton
                         src={`${BASE}${ALBUM_IMAGES[0]}`}
@@ -664,7 +762,7 @@ export function WeddingInvite() {
                       />
                     </div>
 
-                    {/* HÀNG 2: BỐ CỤC ĐẶC BIỆT */}
+                    {/* Row 2 — special layout: left full-height, right stacked 2×  */}
                     <div className="album-grid__cell">
                       <ImageWithSkeleton
                         src={`${BASE}${ALBUM_IMAGES[2]}`}
@@ -695,6 +793,8 @@ export function WeddingInvite() {
                         />
                       </div>
                     </div>
+
+                    {/* Row 3 */}
                     <div className="album-grid__cell">
                       <ImageWithSkeleton
                         src={`${BASE}${ALBUM_IMAGES[5]}`}
@@ -716,9 +816,8 @@ export function WeddingInvite() {
                   </div>
                 </section>
 
-                {/* Footer */}
-                <section className="mt-4 text-center px-1"
-                >
+                {/* ── Footer ────────────────────────────────────────────────── */}
+                <section className="mt-4 px-1 text-center">
                   <ImageWithSkeleton
                     src={`${BASE}thankyou.jpg`}
                     alt=""
@@ -727,17 +826,16 @@ export function WeddingInvite() {
                     loading="lazy"
                     decoding="async"
                     style={{
-                      backgroundColor: 'rgba(133, 73, 28, 0.25)',
-                      top: "-10px"
+                      backgroundColor: "rgba(133, 73, 28, 0.25)",
+                      top: "-10px",
                     }}
                   >
-                    <span
-                      className="w-full absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-2xl font-medium font-['Allura',cursive] text-center"
-                    >
+                    <span className="absolute bottom-8 left-1/2 w-full -translate-x-1/2 text-center text-2xl font-medium font-['Allura',cursive] text-white">
                       {t("footer.welcome")}
                     </span>
                   </ImageWithSkeleton>
                 </section>
+
               </div>
             </div>
           </div>

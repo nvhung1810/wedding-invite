@@ -772,27 +772,23 @@ export function WeddingInvite() {
                         decoding="async"
                       />
                     </div>
-                    <div className="album-grid__stack grid h-full min-h-0 w-full grid-rows-2 gap-2">
-                      <div className="album-grid__cell">
-                        <ImageWithSkeleton
-                          src={`${BASE}${ALBUM_IMAGES[3]}`}
-                          alt=""
-                          className="object-[center_20%]"
-                          skeletonClassName="image-skeleton-shimmer"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                      <div className="album-grid__cell">
-                        <ImageWithSkeleton
-                          src={`${BASE}${ALBUM_IMAGES[4]}`}
-                          alt=""
-                          className="object-[center_5%]"
-                          skeletonClassName="image-skeleton-shimmer"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[3]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <div className="album-grid__cell">
+                      <ImageWithSkeleton
+                        src={`${BASE}${ALBUM_IMAGES[4]}`}
+                        alt=""
+                        skeletonClassName="image-skeleton-shimmer"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
 
                     {/* Row 3 */}

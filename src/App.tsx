@@ -1,4 +1,4 @@
-import { WeddingInvite } from "./pages/WeddingInvite"
+import { WeddingInvite } from "./pages/wedding"
 
 function App() {
   return <WeddingInvite />

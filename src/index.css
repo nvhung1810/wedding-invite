@@ -208,26 +208,6 @@
   animation: heart-blink 1.4s ease-in-out infinite;
 }
 
-@keyframes image-skeleton-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.image-skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(133, 73, 28, 0.08) 0%,
-    rgba(133, 73, 28, 0.18) 45%,
-    rgba(133, 73, 28, 0.08) 90%
-  );
-  background-size: 200% 100%;
-  animation: image-skeleton-shimmer 1.4s ease-in-out infinite;
-}
-
 .album-grid__cell {
   position: relative;
   min-height: 0;
